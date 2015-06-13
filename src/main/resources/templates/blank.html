@@ -6,10 +6,69 @@ xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
  
 <head>
 	<title>车辆管理系统</title>
+	<style>
+		#header {
+		    background-color:grey;
+		    color:white;
+		    text-align:center;
+		    padding:5px;
+		}
+		#nav {
+		    line-height:30px;
+		    width:300px;
+		    float:left;
+		    padding:5px;	      
+		}
+		#content {
+		    float:left;
+		    padding:10px;	 	 
+		}
+		#content_crud {
+		    float:left;
+		    padding:10px;	
+		}
+		#content_table {
+		    float:left;
+		    padding:10px;	
+		}
+		#footer {
+		    background-color:grey;
+		    color:white;
+		    clear:both;
+		    text-align:center;
+		   	padding:5px;	 
+		}
+		
+		table, td, th {
+		    border: 1px solid black;
+		}
+		
+		table {
+		    width: 100%;
+		}
+		
+		th {
+		    text-align: left;
+		}
+	</style>
 </head>
 <body>
-	<div th:include="header"></div>
-	<div th:replace="${view} :: content"></div>
-	<div th:replace="footer"></div>	
+	<div id="header">江西宜昌运输有限公司</div>
+	
+	<div id="nav">
+		<p><a th:href="@{/}">首页</a></p>
+		<p><a th:href="@{/car}">车辆信息</a></p>
+		<p><a th:href="@{/customer}">客户信息</a></p>
+		<p><a th:href="@{/employee}">员工信息</a></p>
+		<p><a th:href="@{/salesRecord}">销售记录信息</a></p>
+	</div>
+	
+	<div id="content">
+		<div th:replace="${view} :: content"></div>
+	</div>
+	
+	<div id="footer">
+		<p>版权所有: 王祥   联系方式：376752150@qq.com</p>
+	</div>	
 </body>
 </html>

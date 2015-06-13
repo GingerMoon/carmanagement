@@ -6,63 +6,69 @@
     </head>
     <body>
     	<div class="container" th:fragment="content">
-	    	<h1>销售信息</h1>
-	    	<form action="#" th:action="@{/salesRecord/add}" th:object="${salesRecord}" method="post">
-	    		<p>
-		    		<label>车辆编号</label>
-					<input type="text" th:field="*{car.id}" />
-					<label>客户编号</label>
-					<input type="text" th:field="*{customer.id}" />
-					<label>驾驶员编号</label>
-					<input type="text" th:field="*{employee.id}" />
-				</p>
-				<p>
-					<label>开始时间</label>
-					<input type="text" th:field="*{beginDate}" />
-					<label>结束时间</label>
-					<input type="text" th:field="*{endDate}" />
-					<label>价格</label>
-					<input type="text" th:field="*{price}" />
-				</p>
-				<p>
-					<label>备注信息</label>
-					<input type="text" th:field="*{description}" />
-				</p>
-				<button type="submit" name="action" value="addsalesRecord">添加销售记录</button>
-				<button type="submit" name="action" value="delsalesRecord">删除销售记录</button>
-			</form>
-	        <table>
-			    <thead>
-			      <tr>
-			        <th>编号</th>
-			        <th>车辆编号</th>
-			        <th>车辆型号</th>
-			        <th>驾驶员编号</th>
-			        <th>驾驶员姓名</th>
-			        <th>客户编号</th>
-			        <th>客户名称</th>
-			        <th>开始时间</th>
-			        <th>结束时间</th>
-			        <th>备注信息</th>
-			        <th>价格</th>
-			      </tr>
-			    </thead>
-			    <tbody>
-			    	<tr th:each="e : ${salesRecords}">
-				        <td th:text="${{e.id}}"></td>
-				        <td th:text="${e.car.id}"></td>
-				        <td th:text="${e.car.name}"></td>
-				        <td th:text="${e.employee.id}"></td>
-				        <td th:text="${e.employee.name}"></td>
-				        <td th:text="${e.customer.id}"></td>
-				        <td th:text="${e.customer.name}"></td>
-				        <td th:text="${e.beginDate}"></td>
-				        <td th:text="${e.endDate}"></td>
-				        <td th:text="${e.description}"></td>	
-				        <td th:text="${e.price}"></td>			        	
-				     </tr>
-				</tbody>
-			</table>
+    		<div id="content_crud">
+    			<h1>销售信息</h1>
+		    	<form action="#" th:action="@{/salesRecord/add}" th:object="${salesRecord}" method="post">
+		    		<p>
+			    		<label>车辆编号</label>
+						<input type="text" th:field="*{car.id}" />
+						<label>客户编号</label>
+						<input type="text" th:field="*{customer.id}" />
+						<label>驾驶员编号</label>
+						<input type="text" th:field="*{employee.id}" />
+					</p>
+					<p>
+						<label>开始时间</label>
+						<input type="text" th:field="*{beginDate}" />
+						<label>结束时间</label>
+						<input type="text" th:field="*{endDate}" />
+						<label>价格</label>
+						<input type="text" th:field="*{price}" />
+					</p>
+					<p>
+						<label>备注信息</label>
+						<input type="text" th:field="*{description}" />
+					</p>
+					<button type="submit" name="action" value="addsalesRecord">添加销售记录</button>
+					<button type="submit" name="action" value="delsalesRecord">删除销售记录</button>
+				</form>
+    		</div>
+    		
+    		<div id="#content_table">
+    			<table>
+				    <thead>
+				      <tr>
+				        <th>编号</th>
+				        <th>车辆编号</th>
+				        <th>车辆型号</th>
+				        <th>驾驶员编号</th>
+				        <th>驾驶员姓名</th>
+				        <th>客户编号</th>
+				        <th>客户名称</th>
+				        <th>开始时间</th>
+				        <th>结束时间</th>
+				        <th>备注信息</th>
+				        <th>价格</th>
+				      </tr>
+				    </thead>
+				    <tbody>
+				    	<tr th:each="e : ${salesRecords}">
+					        <td th:text="${{e.id}}"></td>
+					        <td th:text="${e.car.id}"></td>
+					        <td th:text="${e.car.name}"></td>
+					        <td th:text="${e.employee.id}"></td>
+					        <td th:text="${e.employee.name}"></td>
+					        <td th:text="${e.customer.id}"></td>
+					        <td th:text="${e.customer.name}"></td>
+					        <td th:text="${e.beginDate}"></td>
+					        <td th:text="${e.endDate}"></td>
+					        <td th:text="${e.description}"></td>	
+					        <td th:text="${'$' + e.price}"></td>			        	
+					     </tr>
+					</tbody>
+				</table>
+    		</div>
+    		
 		</div>
     </body>
 </html>
