@@ -13,37 +13,37 @@ import com.mycompany.carmanagement.domain.Car;
 import com.mycompany.carmanagement.domain.Customer;
 import com.mycompany.carmanagement.domain.Employee;
 import com.mycompany.carmanagement.respository.CustomerRepository;
+import com.mycompany.carmanagement.service.CustomerService;
 
 @Controller
 @RequestMapping("/customer")
 public class CustomerController {
 
     @Autowired
-    CustomerRepository repositoryCustomer;
+    CustomerService serviceCustomer;
     
     @ModelAttribute("customer")
     public Customer customer() {
     	return new Customer("","");
     }
     
-    @RequestMapping(value = "/add", method = { RequestMethod.POST, RequestMethod.PUT })
-    public String addEmployee(@ModelAttribute Customer customer, WebRequest request) {
+    @RequestMapping(method = { RequestMethod.POST, RequestMethod.PUT })
+    public String post_put(@ModelAttribute Customer customer, WebRequest request) {
     	String action = request.getParameter("action");
-    	if(action.compareTo("addcustomer") == 0) {
-        	this.repositoryCustomer.save(customer);
-    	} else if(action.compareTo("delcustomer") == 0) {
-    		List<Customer> customers = repositoryCustomer.findByName(customer.getName());
-    		for(Customer i : customers) {
-        		this.repositoryCustomer.delete(i);
-    		}
-    	}
+    	if(action.compareTo("add") == 0) {
+        	this.serviceCustomer.save(customer);
+    	} else if(action.compareTo("delete") == 0) {
+    		this.serviceCustomer.delete(customer);
+    	} else if(action.compareTo("query") == 0) {
+    		return "redirect:/customer?id=" + customer.getId() + "&name=" + customer.getName() + "&description=" + customer.getDescription();
+    	} 
     	return "redirect:/customer";
     }
     
     @ModelAttribute("customers")
     @RequestMapping(method = { RequestMethod.GET })
-    public List<Customer> getAllcustomer() {
-    	return (List<Customer>) repositoryCustomer.findAll();
+    public List<Customer> getCustomers(@ModelAttribute Customer customer) {
+    	return (List<Customer>) this.serviceCustomer.find(customer);
     }
 
 }

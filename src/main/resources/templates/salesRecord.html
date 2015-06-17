@@ -8,8 +8,10 @@
     	<div class="container" th:fragment="content">
     		<div id="content_crud">
     			<h1>销售信息</h1>
-		    	<form action="#" th:action="@{/salesRecord/add}" th:object="${salesRecord}" method="post">
+		    	<form action="#" th:action="@{/salesRecord}" th:object="${salesRecord}" method="post">
 		    		<p>
+		    			<label>销售单编号</label>
+						<input type="text" th:field="*{id}" />
 			    		<label>车辆编号</label>
 						<input type="text" th:field="*{car.id}" />
 						<label>客户编号</label>
@@ -29,8 +31,9 @@
 						<label>备注信息</label>
 						<input type="text" th:field="*{description}" />
 					</p>
-					<button type="submit" name="action" value="addsalesRecord">添加销售记录</button>
-					<button type="submit" name="action" value="delsalesRecord">删除销售记录</button>
+					<button type="submit" name="action" value="add">添加/更新销售记录</button>
+					<button type="submit" name="action" value="delete">删除销售记录</button>
+					<button type="submit" name="action" value="query">查询销售记录</button>
 				</form>
     		</div>
     		

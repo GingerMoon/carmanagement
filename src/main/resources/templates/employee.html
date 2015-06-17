@@ -7,13 +7,16 @@
     <body>
     	<div class="container" th:fragment="content">
 	    	<h1>员工信息</h1>
-	    	<form action="#" th:action="@{/employee/add}" th:object="${employee}" method="post">
+	    	<form action="#" th:action="@{/employee}" th:object="${employee}" method="post">
+	    		<label>编号</label>
+				<input type="text" th:field="*{id}" />
 	    		<label>姓名</label>
 				<input type="text" th:field="*{name}" />
 				<label>备注信息</label>
 				<input type="text" th:field="*{description}" />
-				<button type="submit" name="action" value="addemployee">添加员工</button>
-				<button type="submit" name="action" value="delemployee">删除员工</button>
+				<button type="submit" name="action" value="add">添加/更新员工</button>
+				<button type="submit" name="action" value="delete">删除员工</button>
+				<button type="submit" name="action" value="query">查询客户</button>
 			</form>
 	        <table>
 			    <thead>

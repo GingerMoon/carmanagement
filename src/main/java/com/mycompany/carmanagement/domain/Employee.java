@@ -10,11 +10,12 @@ public class Employee {
 
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO)
-    private long id;
-    private String name;
-    private String description;
+    private long id = -1;
+    private String name = "";
+    private String description = "";
 
     protected Employee() {}
+    protected Employee(long id) {this.id = id;}
 
     public Employee(String firstName, String lastName) {
         this.name = firstName;

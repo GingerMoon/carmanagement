@@ -10,40 +10,40 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.context.request.WebRequest;
 
 import com.mycompany.carmanagement.domain.Car;
+import com.mycompany.carmanagement.domain.Customer;
 import com.mycompany.carmanagement.domain.Employee;
 import com.mycompany.carmanagement.respository.EmployeeRepository;
+import com.mycompany.carmanagement.service.EmployeeService;
 
 @Controller
 @RequestMapping("/employee")
 public class EmployeeController {
 
     @Autowired
-    EmployeeRepository repositoryEmployee;
+    EmployeeService serviceEmployee;
     
     @ModelAttribute("employee")
     public Employee employee() {
     	return new Employee("","");
     }
     
-    @RequestMapping(value = "/add", method = { RequestMethod.POST, RequestMethod.PUT })
-    public String addEmployee(@ModelAttribute Employee employee, WebRequest request) {
+    @RequestMapping(method = { RequestMethod.POST, RequestMethod.PUT })
+    public String post_put(@ModelAttribute Employee employee, WebRequest request) {
     	String action = request.getParameter("action");
-    	if(action.compareTo("addemployee") == 0) {
-        	this.repositoryEmployee.save(employee);
-    	} else if(action.compareTo("delemployee") == 0) {
-    		List<Employee> employees = repositoryEmployee.findByName(employee.getName());
-    		for(Employee i : employees) {
-        		this.repositoryEmployee.delete(i);
-    		}
-    	}
+    	if(action.compareTo("add") == 0) {
+        	this.serviceEmployee.save(employee);
+    	} else if(action.compareTo("delete") == 0) {
+    		this.serviceEmployee.delete(employee);
+    	} else if(action.compareTo("query") == 0) {
+    		return "redirect:/employee?id=" + employee.getId() + "&name=" + employee.getName() + "&description=" + employee.getDescription();
+    	} 
     	return "redirect:/employee";
     }
     
-    
     @ModelAttribute("employees")
     @RequestMapping(method = { RequestMethod.GET })
-    public List<Employee> getAllemployee() {
-    	return (List<Employee>) repositoryEmployee.findAll();
+    public List<Employee> getEmployees(@ModelAttribute Employee employee) {
+    	return (List<Employee>) this.serviceEmployee.find(employee);
     }
-
+    
 }

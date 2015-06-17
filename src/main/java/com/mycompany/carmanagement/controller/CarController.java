@@ -9,41 +9,42 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.context.request.WebRequest;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.mycompany.carmanagement.domain.Car;
 import com.mycompany.carmanagement.domain.Employee;
 import com.mycompany.carmanagement.respository.CarRepository;
+import com.mycompany.carmanagement.service.CarService;
 
 @Controller
 @RequestMapping("/car")
 public class CarController {
 
     @Autowired
-    CarRepository repositoryCar;
+    CarService serviceCar;
     
     @ModelAttribute("car")
     public Car Car() {
     	return new Car("","");
     }
     
-    @RequestMapping(value = "/add", method = { RequestMethod.POST, RequestMethod.PUT })
-    public String addEmployee(@ModelAttribute Car car, WebRequest request) {
+    @RequestMapping(method = { RequestMethod.POST, RequestMethod.PUT })
+    public String post_put(@ModelAttribute Car car, WebRequest request) {
     	String action = request.getParameter("action");
-    	if(action.compareTo("addcar") == 0) {
-        	this.repositoryCar.save(car);
-    	} else if(action.compareTo("delcar") == 0) {
-    		List<Car> cars = repositoryCar.findByName(car.getName());
-    		for(Car i : cars) {
-        		this.repositoryCar.delete(i);
-    		}
-    	}
+    	if(action.compareTo("add") == 0) {
+        	this.serviceCar.save(car);
+    	} else if(action.compareTo("delete") == 0) {
+    		this.serviceCar.delete(car);
+    	} else if(action.compareTo("query") == 0) {
+    		return "redirect:/car?id=" + car.getId() + "&name=" + car.getName() + "&description=" + car.getDescription();
+    	} 
     	return "redirect:/car";
     }
     
     @ModelAttribute("cars")
     @RequestMapping(method = { RequestMethod.GET })
-    public List<Car> getAllCar() {
-    	return (List<Car>) repositoryCar.findAll();
+    public List<Car> getCars(@ModelAttribute Car car) {
+    	return (List<Car>) this.serviceCar.find(car);
     }
 
 }

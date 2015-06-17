@@ -4,13 +4,16 @@
     <body>
     	<div class="container" th:fragment="content">
     		<h1>车辆信息</h1>
-	    	<form action="#" th:action="@{/car/add}" th:object="${car}" method="post">
-	    		<label>姓名</label>
+	    	<form action="#" th:action="@{/car}" th:object="${car}" method="post">
+	    		<label>编号</label>
+				<input type="text" th:field="*{id}" />
+				<label>姓名</label>
 				<input type="text" th:field="*{name}" />
 				<label>备注信息</label>
 				<input type="text" th:field="*{description}" />
-				<button type="submit" name="action" value="addcar">添加车辆</button>
-				<button type="submit" name="action" value="delcar">删除车辆</button>
+				<button type="submit" name="action" value="add">添加/更新车辆</button>
+				<button type="submit" name="action" value="delete">删除车辆</button>
+				<button type="submit" name="action" value="query">查询车辆</button>
 			</form>
 	        <table>
 			    <thead>

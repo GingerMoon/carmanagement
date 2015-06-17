@@ -7,23 +7,29 @@ import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 
 @Entity
 public class SalesRecord {
 
-    private long id;
+    private long id = -1;
+//	@ManyToOne
+//	@JoinColumn(name = "car_id")
     private Car car;
+//	@ManyToOne
+//	@JoinColumn(name = "customer_id")
     private Customer customer;
+//	@ManyToOne
+//	@JoinColumn(name = "employee_id")
     private Employee employee;
-    private long price;
+    private long price = -1;
     private Date beginDate;
     private Date endDate;
-    private String description;
+    private String description = "";
 
     public SalesRecord() {
     	this.car = new Car();
@@ -35,9 +41,35 @@ public class SalesRecord {
     	
     }
 
+
+//    @Column(name = "car_id", insertable=false, updatable=false)
+//	public long getCar_id() {
+//		return car.getId();
+//	}
+//	public void setCar_id(long car_id) {
+//		car.setId(car_id);
+//	}
+//
+//	@Column(name = "customer_id", insertable=false, updatable=false)
+//	public long getCustomer_id() {
+//		return customer.getId();
+//	}
+//	public void setCustomer_id(long car_id) {
+//		customer.setId(car_id);
+//	}
+//
+//	@Column(name = "employee_id", insertable=false, updatable=false)
+//	public long getEmployee_id() {
+//		return employee.getId();
+//	}
+//	public void setEmployee_id(long car_id) {
+//		employee.setId(car_id);
+//	}
+	
+	
     @Id
 	@GeneratedValue(strategy = IDENTITY)
-	@Column(name = "ID")
+	@Column(name = "id")
 	public long getId() {
 		return id;
 	}
@@ -46,8 +78,8 @@ public class SalesRecord {
 		this.id = id;
 	}
 
-	@OneToOne
-	@JoinColumn(name = "CAR_ID")
+	@ManyToOne
+	@JoinColumn(name = "car_id")
 	public Car getCar() {
 		return car;
 	}
@@ -56,8 +88,8 @@ public class SalesRecord {
 		this.car = car;
 	}
 
-	@OneToOne
-	@JoinColumn(name = "CUSTOMER_ID")
+	@ManyToOne
+	@JoinColumn(name = "customer_id")
 	public Customer getCustomer() {
 		return customer;
 	}
@@ -66,8 +98,8 @@ public class SalesRecord {
 		this.customer = customer;
 	}
 
-	@OneToOne
-	@JoinColumn(name = "EMPLOYEE_ID")
+	@ManyToOne
+	@JoinColumn(name = "employee_id")
 	public Employee getEmployee() {
 		return employee;
 	}
@@ -76,7 +108,7 @@ public class SalesRecord {
 		this.employee = employee;
 	}
 
-	@Column(name = "PRICE")
+	@Column(name = "price")
 	public long getPrice() {
 		return price;
 	}
@@ -85,7 +117,7 @@ public class SalesRecord {
 		this.price = price;
 	}
 
-	@Column(name = "BEGIN_DATE")
+	@Column(name = "begin_date")
 	public Date getBeginDate() {
 		return beginDate;
 	}
@@ -94,7 +126,7 @@ public class SalesRecord {
 		this.beginDate = beginDate;
 	}
 
-	@Column(name = "END_DATE")
+	@Column(name = "end_date")
 	public Date getEndDate() {
 		return endDate;
 	}
@@ -103,7 +135,7 @@ public class SalesRecord {
 		this.endDate = endDate;
 	}
 
-	@Column(name = "DESCRIPTION")
+	@Column(name = "description")
 	public String getDescription() {
 		return description;
 	}

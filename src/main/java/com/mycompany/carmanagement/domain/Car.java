@@ -4,17 +4,19 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToOne;
 
 @Entity
 public class Car {
 
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO)
-    private long id;
-    private String name;
-    private String description;
+    private long id = -1;
+    private String name = "";
+    private String description = "";
 
-    protected Car() {}
+    public Car() {}
+    public Car(long id) {this.id = id;}
 
     public Car(String name, String description) {
         this.name = name;

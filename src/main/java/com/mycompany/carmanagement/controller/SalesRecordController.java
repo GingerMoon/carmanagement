@@ -14,38 +14,38 @@ import com.mycompany.carmanagement.domain.Employee;
 import com.mycompany.carmanagement.domain.SalesRecord;
 import com.mycompany.carmanagement.respository.EmployeeRepository;
 import com.mycompany.carmanagement.respository.SalesRecordRepository;
+import com.mycompany.carmanagement.service.SalesRecordService;
 
 @Controller
 @RequestMapping("/salesRecord")
 public class SalesRecordController {
 
     @Autowired
-    SalesRecordRepository repositorySalesRecord;
+    SalesRecordService serviceSalesrecord;
     
     @ModelAttribute("salesRecord")
     public SalesRecord salesRecord() {
     	return new SalesRecord();
     }
     
-    @RequestMapping(value = "/add", method = { RequestMethod.POST, RequestMethod.PUT })
-    public String addSalesRecord(@ModelAttribute SalesRecord salesRecord, WebRequest request) {
+    @RequestMapping(method = { RequestMethod.POST, RequestMethod.PUT })
+    public String post_put(@ModelAttribute SalesRecord salesRecord, WebRequest request) {
     	String action = request.getParameter("action");
-    	if(action.compareTo("addsalesRecord") == 0) {
-        	this.repositorySalesRecord.save(salesRecord);
-    	} else if(action.compareTo("delsalesRecord") == 0) {
-//    		List<SalesRecord> salesRecords = repositorySalesRecord.findByName(salesRecord.getName());
-//    		for(SalesRecord i : salesRecords) {
-//        		this.repositorySalesRecord.delete(i);
-//    		}
-    	}
+    	if(action.compareTo("add") == 0) {
+        	this.serviceSalesrecord.save(salesRecord);
+    	} else if(action.compareTo("delete") == 0) {
+    		this.serviceSalesrecord.delete(salesRecord);
+    	} else if(action.compareTo("query") == 0) {
+    		return "redirect:/salesRecord?id=" + salesRecord.getId() + "&car.id=" + salesRecord.getCar().getId() + "&customer.id=" + salesRecord.getCustomer().getId() + "&employee.id=" + salesRecord.getEmployee().getId() + "&beginDate=" + salesRecord.getBeginDate() + " &endDate=" + salesRecord.getEndDate() + "&price=" + salesRecord.getPrice() + "&description=" + salesRecord.getDescription();
+    	} 
     	return "redirect:/salesRecord";
     }
     
-    
     @ModelAttribute("salesRecords")
     @RequestMapping(method = { RequestMethod.GET })
-    public List<SalesRecord> getAllsalesRecord() {
-    	return (List<SalesRecord>) repositorySalesRecord.findAll();
+    public List<SalesRecord> getSalesrecords(@ModelAttribute SalesRecord salesRecord) {
+    	//return (List<Salesrecord>) this.serviceSalesrecord.find(salesRecord);
+    	return (List<SalesRecord>) this.serviceSalesrecord.findAll();
     }
 
 }

@@ -5,13 +5,16 @@
     <body>
     	<div class="container" th:fragment="content">
     		<h1>客户信息</h1>
-	    	<form action="#" th:action="@{/customer/add}" th:object="${customer}" method="post">
-	    		<label>姓名</label>
+	    	<form action="#" th:action="@{/customer}" th:object="${customer}" method="post">
+	    		<label>编号</label>
+				<input type="text" th:field="*{id}" />
+				<label>姓名</label>
 				<input type="text" th:field="*{name}" />
 				<label>备注信息</label>
 				<input type="text" th:field="*{description}" />
-				<button type="submit" name="action" value="addcustomer">添加客户</button>
-				<button type="submit" name="action" value="delcustomer">删除客户</button>
+				<button type="submit" name="action" value="add">添加/更新客户</button>
+				<button type="submit" name="action" value="delete">删除客户</button>
+				<button type="submit" name="action" value="query">查询客户</button>
 			</form>
 	        <table>
 			    <thead>
