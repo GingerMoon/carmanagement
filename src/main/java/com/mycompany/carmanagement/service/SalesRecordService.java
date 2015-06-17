@@ -42,8 +42,22 @@ public class SalesRecordService {
     	String description = salesRecord.getDescription().isEmpty()? "%" : salesRecord.getDescription();
     	
     	List<SalesRecord> salesRecords = null;
+    	
     	if(id == -1) {
-    		salesRecords = this.repositorySalesRecord.findWithoutID(salesRecord.getCar().getId(), salesRecord.getCustomer().getId(), salesRecord.getEmployee().getId());
+    		if((salesRecord.getCar().getId() == -1) && (salesRecord.getCustomer().getId() == -1) && (salesRecord.getEmployee().getId() == -1)){
+    			salesRecords = this.repositorySalesRecord.findByTime(salesRecord.getBeginDate(), salesRecord.getEndDate());
+    		}
+    		else {
+    			if(salesRecord.getCar().getId() != -1) {
+    				salesRecords = this.repositorySalesRecord.findByCarId(salesRecord.getCar().getId(), salesRecord.getBeginDate(), salesRecord.getEndDate());
+        		}
+        		if(salesRecord.getCustomer().getId() != -1) {
+        			salesRecords = this.repositorySalesRecord.findByCustomerId(salesRecord.getCustomer().getId(), salesRecord.getBeginDate(), salesRecord.getEndDate());
+        		}
+        		if(salesRecord.getEmployee().getId() != -1) {
+        			salesRecords = this.repositorySalesRecord.findByEmployeeId(salesRecord.getEmployee().getId(), salesRecord.getBeginDate(), salesRecord.getEndDate());
+        		}
+    		}
     	}
     	else {
     		SalesRecord e = this.repositorySalesRecord.findById(id);

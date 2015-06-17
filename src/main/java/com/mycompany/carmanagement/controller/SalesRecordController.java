@@ -1,13 +1,17 @@
 package com.mycompany.carmanagement.controller;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.datetime.DateFormatter;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.context.request.WebRequest;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.mycompany.carmanagement.domain.Car;
 import com.mycompany.carmanagement.domain.Employee;
@@ -20,6 +24,8 @@ import com.mycompany.carmanagement.service.SalesRecordService;
 @RequestMapping("/salesRecord")
 public class SalesRecordController {
 
+	private static DateFormat dateFormat =new SimpleDateFormat("yyyy-MM-dd");
+	
     @Autowired
     SalesRecordService serviceSalesrecord;
     
@@ -36,16 +42,25 @@ public class SalesRecordController {
     	} else if(action.compareTo("delete") == 0) {
     		this.serviceSalesrecord.delete(salesRecord);
     	} else if(action.compareTo("query") == 0) {
-    		return "redirect:/salesRecord?id=" + salesRecord.getId() + "&car.id=" + salesRecord.getCar().getId() + "&customer.id=" + salesRecord.getCustomer().getId() + "&employee.id=" + salesRecord.getEmployee().getId() + "&beginDate=" + salesRecord.getBeginDate() + " &endDate=" + salesRecord.getEndDate() + "&price=" + salesRecord.getPrice() + "&description=" + salesRecord.getDescription();
+    		String beginDate = dateFormat.format(salesRecord.getBeginDate());
+    		String endDate = dateFormat.format(salesRecord.getEndDate());
+    		return "redirect:/salesRecord?id=" + salesRecord.getId() + "&car.id=" + salesRecord.getCar().getId() + "&customer.id=" + salesRecord.getCustomer().getId() + "&employee.id=" + salesRecord.getEmployee().getId() + "&beginDate=" + dateFormat.format(salesRecord.getBeginDate()) + " &endDate=" + dateFormat.format(salesRecord.getEndDate()) + "&price=" + salesRecord.getPrice() + "&description=" + salesRecord.getDescription();
     	} 
-    	return "redirect:/salesRecord";
+    	return "redirect:/salesRecord/all";
     }
     
     @ModelAttribute("salesRecords")
     @RequestMapping(method = { RequestMethod.GET })
     public List<SalesRecord> getSalesrecords(@ModelAttribute SalesRecord salesRecord) {
-    	//return (List<Salesrecord>) this.serviceSalesrecord.find(salesRecord);
-    	return (List<SalesRecord>) this.serviceSalesrecord.findAll();
+    	return (List<SalesRecord>) this.serviceSalesrecord.find(salesRecord);
     }
 
+    @ModelAttribute("salesRecords")
+    @RequestMapping(value = "/all", method = { RequestMethod.GET })
+    public ModelAndView getSalesrecords() {
+    	ModelAndView mav = new ModelAndView("salesRecord");
+    	List<SalesRecord> salesRecords = this.serviceSalesrecord.findAll();
+    	mav.addObject("salesRecords", salesRecords);
+    	return mav;
+    }
 }

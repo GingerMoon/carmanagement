@@ -17,14 +17,8 @@ import javax.persistence.OneToOne;
 public class SalesRecord {
 
     private long id = -1;
-//	@ManyToOne
-//	@JoinColumn(name = "car_id")
     private Car car;
-//	@ManyToOne
-//	@JoinColumn(name = "customer_id")
     private Customer customer;
-//	@ManyToOne
-//	@JoinColumn(name = "employee_id")
     private Employee employee;
     private long price = -1;
     private Date beginDate;
@@ -40,31 +34,6 @@ public class SalesRecord {
     	this.description = new String();
     	
     }
-
-
-//    @Column(name = "car_id", insertable=false, updatable=false)
-//	public long getCar_id() {
-//		return car.getId();
-//	}
-//	public void setCar_id(long car_id) {
-//		car.setId(car_id);
-//	}
-//
-//	@Column(name = "customer_id", insertable=false, updatable=false)
-//	public long getCustomer_id() {
-//		return customer.getId();
-//	}
-//	public void setCustomer_id(long car_id) {
-//		customer.setId(car_id);
-//	}
-//
-//	@Column(name = "employee_id", insertable=false, updatable=false)
-//	public long getEmployee_id() {
-//		return employee.getId();
-//	}
-//	public void setEmployee_id(long car_id) {
-//		employee.setId(car_id);
-//	}
 	
 	
     @Id
