@@ -74,8 +74,8 @@ xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
 
 			colSettings: [],
 
-			text1: "items/page",
-			text2: "Loading...",
+			text1: "条记录/每页",
+			text2: "载入中...",
 
 			sortStartCB: null,
 			sortEndCB: null
@@ -87,7 +87,7 @@ xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
 
 		for(var count = 0; trs.length > count; count++) {
 			var tds = trs[count].childNodes;
-			total += Number(tds[10].innerText);
+			total += Number(tds[10].textContent);
 		}
 
 		$("#total").text(total);
