@@ -80,6 +80,17 @@ xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
 			sortStartCB: null,
 			sortEndCB: null
 			});
+		
+		var total = 0;
+		var tbody = $("tbody");
+		var trs = tbody[0].getElementsByTagName("tr"); 
+
+		for(var count = 0; trs.length > count; count++) {
+			var tds = trs[count].childNodes;
+			total += Number(tds[10].innerText);
+		}
+
+		$("#total").text(total);
 		});
 	</script>
 	
