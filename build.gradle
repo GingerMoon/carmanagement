@@ -11,6 +11,7 @@ buildscript {
     }
 }
 
+apply plugin: 'war'
 apply plugin: 'java'
 apply plugin: 'eclipse'
 apply plugin: 'idea'
@@ -38,6 +39,7 @@ dependencies {
     compile("org.springframework.boot:spring-boot-starter-ws")
     runtime("mysql:mysql-connector-java")
     testCompile("org.springframework.boot:spring-boot-starter-test") 
+    providedRuntime 'org.springframework.boot:spring-boot-starter-tomcat'
 }
 
 

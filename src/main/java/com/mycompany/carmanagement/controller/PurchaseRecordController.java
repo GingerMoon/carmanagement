@@ -42,21 +42,17 @@ public class PurchaseRecordController {
     		String endDate = dateFormat.format(purchaseRecord.getEndDate());
     		return "redirect:/purchaseRecord?id=" + purchaseRecord.getId() + "&car.id=" + purchaseRecord.getCar().getId() + "&customer.id=" + purchaseRecord.getCustomer().getId() + "&employee.id=" + purchaseRecord.getEmployee().getId() + "&beginDate=" + dateFormat.format(purchaseRecord.getBeginDate()) + " &endDate=" + dateFormat.format(purchaseRecord.getEndDate()) + "&price=" + purchaseRecord.getPrice() + "&description=" + purchaseRecord.getDescription();
     	} 
-    	return "redirect:/purchaseRecord/all";
+    	return "redirect:/purchaseRecord?all=true";
     }
     
     @ModelAttribute("purchaseRecords")
     @RequestMapping(method = { RequestMethod.GET })
-    public List<PurchaseRecord> getPurchaserecords(@ModelAttribute PurchaseRecord purchaseRecord) {
-    	return (List<PurchaseRecord>) this.servicePurchaserecord.find(purchaseRecord);
-    }
-
-    @ModelAttribute("purchaseRecords")
-    @RequestMapping(value = "/all", method = { RequestMethod.GET })
-    public ModelAndView getPurchaserecords() {
-    	ModelAndView mav = new ModelAndView("purchaseRecord");
-    	List<PurchaseRecord> purchaseRecords = this.servicePurchaserecord.findAll();
-    	mav.addObject("purchaseRecords", purchaseRecords);
-    	return mav;
+    public List<PurchaseRecord> getPurchaserecords(@ModelAttribute PurchaseRecord purchaseRecord, WebRequest request) {
+    	String all = request.getParameter("all");
+    	if(all != null) {
+    		return (List<PurchaseRecord>) this.servicePurchaserecord.findAll();
+    	} else {
+    		return (List<PurchaseRecord>) this.servicePurchaserecord.find(purchaseRecord);
+    	}
     }
 }

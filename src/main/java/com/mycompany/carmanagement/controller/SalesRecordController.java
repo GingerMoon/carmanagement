@@ -46,21 +46,17 @@ public class SalesRecordController {
     		String endDate = dateFormat.format(salesRecord.getEndDate());
     		return "redirect:/salesRecord?id=" + salesRecord.getId() + "&car.id=" + salesRecord.getCar().getId() + "&customer.id=" + salesRecord.getCustomer().getId() + "&employee.id=" + salesRecord.getEmployee().getId() + "&beginDate=" + dateFormat.format(salesRecord.getBeginDate()) + " &endDate=" + dateFormat.format(salesRecord.getEndDate()) + "&price=" + salesRecord.getPrice() + "&description=" + salesRecord.getDescription();
     	} 
-    	return "redirect:/salesRecord/all";
+    	return "redirect:/salesRecord?all=true";
     }
     
     @ModelAttribute("salesRecords")
     @RequestMapping(method = { RequestMethod.GET })
-    public List<SalesRecord> getSalesrecords(@ModelAttribute SalesRecord salesRecord) {
-    	return (List<SalesRecord>) this.serviceSalesrecord.find(salesRecord);
-    }
-
-    @ModelAttribute("salesRecords")
-    @RequestMapping(value = "/all", method = { RequestMethod.GET })
-    public ModelAndView getSalesrecords() {
-    	ModelAndView mav = new ModelAndView("salesRecord");
-    	List<SalesRecord> salesRecords = this.serviceSalesrecord.findAll();
-    	mav.addObject("salesRecords", salesRecords);
-    	return mav;
+    public List<SalesRecord> getSalesrecords(@ModelAttribute SalesRecord salesRecord, WebRequest request) {
+    	String all = request.getParameter("all");
+    	if(all != null) {
+    		return (List<SalesRecord>) this.serviceSalesrecord.findAll(); 
+    	} else {
+    		return (List<SalesRecord>) this.serviceSalesrecord.find(salesRecord);
+    	}
     }
 }

@@ -7,7 +7,7 @@
     <body>
     	<div class="container" th:fragment="content">
     		<div id="content_crud">
-    			<h1>销售信息</h1>
+    			<h1>采购信息</h1>
 		    	<form action="#" th:action="@{/purchaseRecord}" th:object="${purchaseRecord}" method="post">
 		    		<p>
 		    			<label>采购单编号</label>
@@ -38,7 +38,7 @@
     		</div>
     		
     		<div id="#content_table">
-    			<table>
+    			<table id='tabledata'>
 				    <thead>
 				      <tr>
 				        <th>编号</th>
