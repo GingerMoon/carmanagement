@@ -5,13 +5,14 @@ import java.util.List;
 
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import com.mycompany.carmanagement.domain.SalesRecord;
 
 @Repository
-public interface SalesRecordRepository extends CrudRepository<SalesRecord, Long> {
+public interface SalesRecordRepository extends PagingAndSortingRepository<SalesRecord, Long> {
 
 	SalesRecord findById(long id);
 

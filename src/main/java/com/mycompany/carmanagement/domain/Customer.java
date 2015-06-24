@@ -14,13 +14,8 @@ public class Customer {
     private String name = "";
     private String description = "";
 
-    protected Customer() { }
+    public Customer() { }
     protected Customer(long id) { this.id = id;}
-
-    public Customer(String firstName, String lastName) {
-        this.name = firstName;
-        this.description = lastName;
-    }
 
     @Override
     public String toString() {

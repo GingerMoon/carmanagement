@@ -1,39 +1,58 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
-    <head>
-        <title>员工信息</title>
-    </head>
-    <body>
-    	<div class="container" th:fragment="content">
-	    	<h1>员工信息</h1>
-	    	<form action="#" th:action="@{/employee}" th:object="${employee}" method="post">
-	    		<label>编号</label>
-				<input type="text" th:field="*{id}" />
-	    		<label>姓名</label>
-				<input type="text" th:field="*{name}" />
-				<label>备注信息</label>
-				<input type="text" th:field="*{description}" />
-				<button type="submit" name="action" value="add">添加/更新员工</button>
-				<button type="submit" name="action" value="delete">删除员工</button>
-				<button type="submit" name="action" value="query">查询客户</button>
-			</form>
-	        <table id='tabledata'>
-			    <thead>
-			      <tr>
-			        <th>编号</th>
-			        <th>姓名</th>
-			        <th>备注信息</th>
-			      </tr>
-			    </thead>
-			    <tbody>
-			    	<tr th:each="e : ${employees}">
-				        <td th:text="${{e.id}}"></td>
-				        <td th:text="${e.name}"></td>
-				        <td th:text="${e.description}"></td>			        	
-				     </tr>
-				</tbody>
-			</table>
-		</div>
-    </body>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+
+<body>
+	<div class="container" th:fragment="content">
+		<div id="EmployeeTableContainer" style="width: 99%;"></div>
+		<script th:inline="javascript">
+			$(document).ready(function() {
+				//setup the jtable that will display the results
+				$('#EmployeeTableContainer').jtable({
+					title : '员工信息表',
+					selecting : true, //Enable selecting 
+					paging : true, //Enable paging
+					pageSize : 10, //Set page size (default: 10)
+					sorting : true, //Enable sorting
+					jqueryuiTheme: true,
+					actions : {
+						listAction : 'employee/getAll',
+						createAction : 'employee/add',
+						updateAction : 'employee/update',
+						deleteAction : 'employee/remove'
+					},
+					fields : {
+						id : {
+							title : '员工编号',
+							key : true,
+							list : true,
+							create : false,
+							edit : false
+						},
+						name : {
+							title : '员工姓名',
+							width : '15%'
+						},
+						description : {
+							title : '描述信息',
+							width : '25%'
+						}
+					},
+					//Register to selectionChanged event to hanlde events                                     
+					recordAdded : function(event, data) {
+						//after record insertion, reload the records
+						$('#EmployeeTableContainer').jtable('load');
+					},
+					recordUpdated : function(event, data) {
+						//after record updation, reload the records
+						$('#EmployeeTableContainer').jtable('load');
+					}
+				});
+				$('#EmployeeTableContainer').jtable('load');
+			});
+		</script>
+	</div>
+</body>
+
 </html>

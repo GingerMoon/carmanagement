@@ -7,9 +7,13 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.datetime.DateFormatter;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -19,44 +23,91 @@ import com.mycompany.carmanagement.domain.SalesRecord;
 import com.mycompany.carmanagement.respository.EmployeeRepository;
 import com.mycompany.carmanagement.respository.SalesRecordRepository;
 import com.mycompany.carmanagement.service.SalesRecordService;
+import com.mycompany.carmanagement.service.SalesRecordService;
+import com.mycompany.carmanagement.web.json.bean.SalesRecordJsonBean;
+import com.mycompany.carmanagement.web.json.response.SalesRecordJsonResponse;
+import com.mycompany.carmanagement.web.json.response.SalesRecordListJsonResponse;
 
 @Controller
 @RequestMapping("/salesRecord")
 public class SalesRecordController {
 
-	private static DateFormat dateFormat =new SimpleDateFormat("yyyy-MM-dd");
-	
-    @Autowired
-    SalesRecordService serviceSalesrecord;
-    
-    @ModelAttribute("salesRecord")
-    public SalesRecord salesRecord() {
-    	return new SalesRecord();
-    }
-    
-    @RequestMapping(method = { RequestMethod.POST, RequestMethod.PUT })
-    public String post_put(@ModelAttribute SalesRecord salesRecord, WebRequest request) {
-    	String action = request.getParameter("action");
-    	if(action.compareTo("add") == 0) {
-        	this.serviceSalesrecord.save(salesRecord);
-    	} else if(action.compareTo("delete") == 0) {
-    		this.serviceSalesrecord.delete(salesRecord);
-    	} else if(action.compareTo("query") == 0) {
-    		String beginDate = dateFormat.format(salesRecord.getBeginDate());
-    		String endDate = dateFormat.format(salesRecord.getEndDate());
-    		return "redirect:/salesRecord?id=" + salesRecord.getId() + "&car.id=" + salesRecord.getCar().getId() + "&customer.id=" + salesRecord.getCustomer().getId() + "&employee.id=" + salesRecord.getEmployee().getId() + "&beginDate=" + dateFormat.format(salesRecord.getBeginDate()) + " &endDate=" + dateFormat.format(salesRecord.getEndDate()) + "&price=" + salesRecord.getPrice() + "&description=" + salesRecord.getDescription();
-    	} 
-    	return "redirect:/salesRecord?all=true";
-    }
-    
-    @ModelAttribute("salesRecords")
-    @RequestMapping(method = { RequestMethod.GET })
-    public List<SalesRecord> getSalesrecords(@ModelAttribute SalesRecord salesRecord, WebRequest request) {
-    	String all = request.getParameter("all");
-    	if(all != null) {
-    		return (List<SalesRecord>) this.serviceSalesrecord.findAll(); 
-    	} else {
-    		return (List<SalesRecord>) this.serviceSalesrecord.find(salesRecord);
-    	}
-    }
+	@Autowired
+	private SalesRecordService salesRecordService;
+
+	@RequestMapping(method = RequestMethod.GET)
+	public String show(ModelMap model) {
+		return "salesRecord";
+	}
+
+	@RequestMapping(value = "/getAll", method = RequestMethod.POST)
+	@ResponseBody
+	public SalesRecordListJsonResponse getAll(@RequestParam int jtStartIndex,
+			@RequestParam int jtPageSize) {
+		SalesRecordListJsonResponse jstr;
+		List<SalesRecordJsonBean> salesRecordList;
+		try {
+			long salesRecordCount = salesRecordService.getCount();
+			salesRecordList = salesRecordService.getAll(jtStartIndex/jtPageSize, jtPageSize);;
+			jstr = new SalesRecordListJsonResponse("OK", salesRecordList,
+					salesRecordCount);
+		} catch (Exception e) {
+			jstr = new SalesRecordListJsonResponse("ERROR", e.getMessage());
+		}
+
+		return jstr;
+	}
+
+	@RequestMapping(value = "/add", method = RequestMethod.POST)
+	@ResponseBody
+	public SalesRecordJsonResponse add(
+			@ModelAttribute SalesRecordJsonBean jsnSalesRecordBean,
+			BindingResult result) {
+		SalesRecordJsonResponse jsonJtableResponse;
+		if (result.hasErrors()) {
+			jsonJtableResponse = new SalesRecordJsonResponse("ERROR",
+					"Form invalid");
+		}
+		try {
+			salesRecordService.add(jsnSalesRecordBean);
+			jsonJtableResponse = new SalesRecordJsonResponse("OK", jsnSalesRecordBean);
+		} catch (Exception e) {
+			jsonJtableResponse = new SalesRecordJsonResponse("ERROR",
+					e.getMessage());
+		}
+		return jsonJtableResponse;
+	}
+
+	@RequestMapping(value = "/update", method = RequestMethod.POST)
+	@ResponseBody
+	public SalesRecordJsonResponse update(
+			@ModelAttribute SalesRecordJsonBean salesRecordBean, BindingResult result) {
+		SalesRecordJsonResponse jsonJtableResponse;
+		if (result.hasErrors()) {
+			jsonJtableResponse = new SalesRecordJsonResponse("ERROR",
+					"Form invalid");
+		}
+		try {
+			salesRecordService.update(salesRecordBean);
+			jsonJtableResponse = new SalesRecordJsonResponse("OK", salesRecordBean);
+		} catch (Exception e) {
+			jsonJtableResponse = new SalesRecordJsonResponse("ERROR",
+					e.getMessage());
+		}
+		return jsonJtableResponse;
+	}
+
+	@RequestMapping(value = "/remove", method = RequestMethod.POST)
+	@ResponseBody
+	public SalesRecordJsonResponse remove(@RequestParam String id) {
+		SalesRecordJsonResponse jsonJtableResponse;
+		try {
+			salesRecordService.delete(new Long(id));
+			jsonJtableResponse = new SalesRecordJsonResponse("OK");
+		} catch (Exception e) {
+			jsonJtableResponse = new SalesRecordJsonResponse("ERROR",
+					e.getMessage());
+		}
+		return jsonJtableResponse;
+	}
 }

@@ -2,85 +2,89 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:th="http://www.thymeleaf.org"
 	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
-<head>
-<title>采购信息</title>
-</head>
+
 <body>
 	<div class="container" th:fragment="content">
-		<div id="content_crud">
-			<h1>采购信息</h1>
-			<form action="#" th:action="@{/purchaseRecord}"
-				th:object="${purchaseRecord}" method="post">
-				<p>
-					<label>采购单编号</label> <input type="text" th:field="*{id}" /> <label>车辆编号</label>
-					<input type="text" th:field="*{car.id}" /> <label>供应商编号</label> <input
-						type="text" th:field="*{customer.id}" /> <label>员工编号</label> <input
-						type="text" th:field="*{employee.id}" />
-				</p>
-				<p>
-					<label>开始时间</label> <input type="date" th:field="*{beginDate}" />
-					<label>结束时间</label> <input type="date" th:field="*{endDate}" /> <label>价格</label>
-					<input type="text" th:field="*{price}" />
-				</p>
-				<p>
-					<label>备注信息</label> <input type="text" th:field="*{description}" />
-				</p>
-				<button type="submit" name="action" value="add">添加/更新采购记录</button>
-				<button type="submit" name="action" value="delete">删除采购记录</button>
-				<button type="submit" name="action" value="query">查询采购记录</button>
-			</form>
-		</div>
-
-		<div id="#content_table">
-			<table id='tabledata'>
-				<thead>
-					<tr>
-						<th>编号</th>
-						<th>车辆编号</th>
-						<th>车辆型号</th>
-						<th>员工编号</th>
-						<th>员工姓名</th>
-						<th>供应商编号</th>
-						<th>供应商名称</th>
-						<th>开始时间</th>
-						<th>结束时间</th>
-						<th>备注信息</th>
-						<th>价格￥</th>
-					</tr>
-				</thead>
-				<tfoot>
-					<tr>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td>总计</td>
-						<td id="total"></td>
-					</tr>
-				</tfoot>
-				<tbody>
-					<tr th:each="e : ${purchaseRecords}">
-						<td th:text="${{e.id}}"></td>
-						<td th:text="${e.car.id}"></td>
-						<td th:text="${e.car.name}"></td>
-						<td th:text="${e.employee.id}"></td>
-						<td th:text="${e.employee.name}"></td>
-						<td th:text="${e.customer.id}"></td>
-						<td th:text="${e.customer.name}"></td>
-						<td th:text="${e.beginDate}"></td>
-						<td th:text="${e.endDate}"></td>
-						<td th:text="${e.description}"></td>
-						<td th:text="${e.price}"></td>
-					</tr>
-				</tbody>
-			</table>
-		</div>
-
+		<div id="PurchaseRecordTableContainer" style="width: 99%;"></div>
+		<script th:inline="javascript">
+			$(document).ready(function() {
+				//setup the jtable that will display the results
+				$('#PurchaseRecordTableContainer').jtable({
+					title : '采购信息表',
+					selecting : true, //Enable selecting 
+					paging : true, //Enable paging
+					pageSize : 10, //Set page size (default: 10)
+					sorting : true, //Enable sorting
+					jqueryuiTheme: true,
+					actions : {
+						listAction : 'purchaseRecord/getAll',
+						createAction : 'purchaseRecord/add',
+						updateAction : 'purchaseRecord/update',
+						deleteAction : 'purchaseRecord/remove'
+					},
+					fields : {
+						id : {
+							title : '编号',
+							key : true,
+							list : true,
+							create : false,
+							edit : false
+						},
+						carId : {
+							title : '车辆编号',
+							width : '5%'
+						},
+						carName : {
+							title : '车辆名称',
+							width : '10%'
+						},
+						employeeId : {
+							title : '员工编号',
+							width : '5%'
+						},
+						employeeName : {
+							title : '员工姓名',
+							width : '5%'
+						},
+						providerId : {
+							title : '供应商编号',
+							width : '5%'
+						},
+						providerName : {
+							title : '供应商名称',
+							width : '10%'
+						},
+						beginDate : {
+							title : '开始时间',
+							width : '20%'
+						},
+						endDate : {
+							title : '结束时间',
+							width : '20%'
+						},
+						description : {
+							title : '描述',
+							width : '30%'
+						},
+						price : {
+							title : '价格',
+							width : '10%'
+						}
+					},
+					//Register to selectionChanged event to hanlde events                                     
+					recordAdded : function(event, data) {
+						//after record insertion, reload the records
+						$('#PurchaseRecordTableContainer').jtable('load');
+					},
+					recordUpdated : function(event, data) {
+						//after record updation, reload the records
+						$('#PurchaseRecordTableContainer').jtable('load');
+					}
+				});
+				$('#PurchaseRecordTableContainer').jtable('load');
+			});
+		</script>
 	</div>
 </body>
+
 </html>

@@ -3,57 +3,88 @@ package com.mycompany.carmanagement.service;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import com.mycompany.carmanagement.domain.Car;
-import com.mycompany.carmanagement.domain.Customer;
+import com.mycompany.carmanagement.exception.BusinessException;
 import com.mycompany.carmanagement.respository.CarRepository;
+import com.mycompany.carmanagement.web.json.bean.CarJsonBean;
 
 @Service
 public class CarService {
 
-	public static final String NA = "NA";
-	
-    @Autowired
-    CarRepository repositoryCar;
-    
-    public void save(Car car) {
-    	if(car.getName().isEmpty()) {
-    		car.setName(NA);
-    	}
-    	if(car.getDescription().isEmpty()) {
-    		car.setDescription(NA);
-    	}
-    	this.repositoryCar.save(car);
-    }
-    
-    public void delete(Car car) {
-    	List<Car> cars = find(car);
-    	for(Car i : cars) {
-    		this.repositoryCar.delete(i);
-		}
-    }
+	private static final Logger LOG = LoggerFactory
+			.getLogger(CarService.class);
 
-    public List<Car> find(Car car) {
-    	long id = car.getId();
-    	String name = car.getName().isEmpty()? "%" : car.getName();
-    	String description = car.getDescription().isEmpty()? "%" : car.getDescription();
-    	
-    	List<Car> cars = null;
-    	if(id == -1) {
-    		cars = this.repositoryCar.findWithoutID(name, description);
-    	}
-    	else {
-    		Car e = this.repositoryCar.findById(id);
-    		cars = new ArrayList<Car> ();
-    		cars.add(e);
-    	}
-    	return cars;
-    }
-    
-	public List<Car> findAll() {
-		return (List<Car>) this.repositoryCar.findAll();
+	@Autowired
+	CarRepository carRepository;
+
+	public long getCount() {
+		return this.carRepository.count();
+	}
+
+	public List<CarJsonBean> getAll(int jtStartIndex, int jtPageSize)
+			throws BusinessException {
+		List<CarJsonBean> jsnCars = new ArrayList<CarJsonBean>();
+		try {
+			Page<Car> customers = this.carRepository
+					.findAll(new PageRequest(jtStartIndex, jtPageSize));
+			for (Car customer : customers) {
+				CarJsonBean jsnCar = new CarJsonBean();
+				jsnCar.setId(new Long(customer.getId()).toString());
+				jsnCar.setName(customer.getName());
+				jsnCar.setDescription(customer.getDescription());
+				jsnCars.add(jsnCar);
+			}
+		} catch (Exception e) {
+			LOG.error("Exception thrown while listing customers from - "
+					+ jtStartIndex + " to " + jtPageSize + " - "
+					+ e.getMessage());
+			throw new BusinessException(
+					"Exception while listing expenses from - " + jtStartIndex
+							+ " to " + jtPageSize + " - " + e.getMessage());
+		}
+		return jsnCars;
+	}
+
+	public void add(CarJsonBean jsnCarBean) throws BusinessException {
+		try {
+			Car customer = new Car();
+			customer.setName(jsnCarBean.getName());
+			customer.setDescription(jsnCarBean.getDescription());
+			this.carRepository.save(customer);
+		} catch (Exception e) {
+			LOG.error("Exception thrown while adding customer"
+					+ jsnCarBean.toString() + e.getMessage());
+			throw new BusinessException(
+					"Exception thrown while adding customer"
+							+ jsnCarBean.toString() + e.getMessage());
+		}
+	}
+
+	public void update(CarJsonBean jsnCarBean)
+			throws BusinessException {
+		try {
+			Car customer = new Car();
+			customer.setId(new Long(jsnCarBean.getId()));
+			customer.setName(jsnCarBean.getName());
+			customer.setDescription(jsnCarBean.getDescription());
+			this.carRepository.save(customer);
+		} catch (Exception e) {
+			LOG.error("Exception thrown while adding customer"
+					+ jsnCarBean.toString() + e.getMessage());
+			throw new BusinessException(
+					"Exception thrown while adding customer"
+							+ jsnCarBean.toString() + e.getMessage());
+		}
+	}
+
+	public void delete(Long customerId) {
+		this.carRepository.delete(customerId);
 	}
 }

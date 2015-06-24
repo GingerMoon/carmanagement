@@ -16,7 +16,8 @@ public class WebMvcConfig extends WebMvcConfigurationSupport {
     
 	@Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        registry.addResourceHandler("/slimtable/**").addResourceLocations("classpath:/static/slimtable/");
+		registry.addResourceHandler("/slimtable/**").addResourceLocations("classpath:/static/slimtable/");
+		registry.addResourceHandler("/jtableResources/**").addResourceLocations("classpath:/static/jtableResources/");
     }
 	
     @Override

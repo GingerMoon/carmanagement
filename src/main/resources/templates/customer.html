@@ -1,37 +1,58 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
-      
-    <body>
-    	<div class="container" th:fragment="content">
-    		<h1>客户信息</h1>
-	    	<form action="#" th:action="@{/customer}" th:object="${customer}" method="post">
-	    		<label>编号</label>
-				<input type="text" th:field="*{id}" />
-				<label>姓名</label>
-				<input type="text" th:field="*{name}" />
-				<label>备注信息</label>
-				<input type="text" th:field="*{description}" />
-				<button type="submit" name="action" value="add">添加/更新客户</button>
-				<button type="submit" name="action" value="delete">删除客户</button>
-				<button type="submit" name="action" value="query">查询客户</button>
-			</form>
-	        <table id='tabledata'>
-			    <thead>
-			      <tr>
-			        <th>编号</th>
-			        <th>姓名</th>
-			        <th>备注信息</th>
-			      </tr>
-			    </thead>
-			    <tbody>
-			    	<tr th:each="c : ${customers}">
-				        <td th:text="${{c.id}}"></td>
-				        <td th:text="${c.name}"></td>
-				        <td th:text="${c.description}"></td>			        	
-				     </tr>
-				</tbody>
-			</table>
-		</div>
-    </body>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+
+<body>
+	<div class="container" th:fragment="content">
+		<div id="CustomerTableContainer" style="width: 99%;"></div>
+		<script th:inline="javascript">
+			$(document).ready(function() {
+				//setup the jtable that will display the results
+				$('#CustomerTableContainer').jtable({
+					title : '客户信息表',
+					selecting : true, //Enable selecting 
+					paging : true, //Enable paging
+					pageSize : 10, //Set page size (default: 10)
+					sorting : true, //Enable sorting
+					jqueryuiTheme: true,
+					actions : {
+						listAction : 'customer/getAll',
+						createAction : 'customer/add',
+						updateAction : 'customer/update',
+						deleteAction : 'customer/remove'
+					},
+					fields : {
+						id : {
+							title : '客户编号',
+							key : true,
+							list : true,
+							create : false,
+							edit : false
+						},
+						name : {
+							title : '客户姓名',
+							width : '15%'
+						},
+						description : {
+							title : '描述信息',
+							width : '25%'
+						}
+					},
+					//Register to selectionChanged event to hanlde events                                     
+					recordAdded : function(event, data) {
+						//after record insertion, reload the records
+						$('#CustomerTableContainer').jtable('load');
+					},
+					recordUpdated : function(event, data) {
+						//after record updation, reload the records
+						$('#CustomerTableContainer').jtable('load');
+					}
+				});
+				$('#CustomerTableContainer').jtable('load');
+			});
+		</script>
+	</div>
+</body>
+
 </html>

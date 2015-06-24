@@ -3,96 +3,36 @@
 xmlns="http://www.w3.org/1999/xhtml" 
 xmlns:th="http://www.thymeleaf.org" 
 xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+        
+<script src="./jtableResources/jquery.min.js" type="text/javascript"></script>
 
-<script src="./slimtable/jquery.min.js"></script>
-<script src="./slimtable/js/slimtable.min.js" type="text/javascript"></script>
-<link href="./slimtable/css/slimtable.css" rel="stylesheet"></link>
+<script src="./jtableResources/jquery-ui-1.11.4.custom/jquery-ui.min.js" type="text/javascript"></script>
+<link href="./jtableResources/jquery-ui-1.11.4.custom/jquery-ui.min.css" rel="stylesheet" type="text/css" />
 
+<script src="./jtableResources/jtable/jquery.jtable.min.js" type="text/javascript"></script>     
+<link href="./jtableResources/jtable/themes/jqueryui/jtable_jqueryui.css" rel="stylesheet" type="text/css" />
+
+<script src="./jtableResources/jtable/localization/jquery.jtable.zh-CN.js" type="text/javascript" ></script>
+   
 <head>
 	<title>车辆管理系统</title>
-	<style>
-		#header {
-		    background-color:grey;
-		    color:white;
-		    text-align:center;
-		    padding:5px;
-		}
-		#nav {
-		    line-height:30px;
-		    width:300px;
-		    float:left;
-		    padding:5px;	      
-		}
-		#content {
-		    float:left;
-		    padding:10px;	 	 
-		}
-		#content_crud {
-		    float:left;
-		    padding:10px;	
-		}
-		#content_table {
-		    float:left;
-		    padding:10px;	
-		}
-		#footer {
-		    background-color:grey;
-		    color:white;
-		    clear:both;
-		    text-align:center;
-		   	padding:5px;	 
-		}
-		
-		
-	</style>
 </head>
 <body>
 	<div id="header">江西宜昌运输有限公司</div>
 	
 	<div id="nav">
-		<p><a th:href="@{/}">首页</a></p>
-		<p><a th:href="@{/car}">车辆信息</a></p>
-		<p><a th:href="@{/customer}">客户信息</a></p>
-		<p><a th:href="@{/provider}">供应商信息</a></p>
-		<p><a th:href="@{/employee}">员工信息</a></p>
-		<p><a th:href="@{/salesRecord?all=true}">销售记录信息</a></p>
-		<p><a th:href="@{/purchaseRecord?all=true}">采购记录信息</a></p>
+		<a th:href="@{/}">首页</a>
+		<a th:href="@{/car}">车辆信息</a>
+		<a th:href="@{/customer}">客户信息</a>
+		<a th:href="@{/provider}">供应商信息</a>
+		<a th:href="@{/employee}">员工信息</a>
+		<a th:href="@{/salesRecord}">销售记录信息</a>
+		<a th:href="@{/purchaseRecord}">采购记录信息</a>
 	</div>
 	
 	<div id="content">
 		<div th:replace="${view} :: content"></div>
 	</div>
-	
-	<script type="text/javascript">
-	$(function() {
-		$("#tabledata").slimtable({
-			tableData: null,
-			dataUrl: null,
-
-			itemsPerPage: 10,
-			ipp_list: [5,10,20],
-
-			colSettings: [],
-
-			text1: "条记录/每页",
-			text2: "载入中...",
-
-			sortStartCB: null,
-			sortEndCB: null
-			});
-		
-		var total = 0;
-		var tbody = $("tbody");
-		var trs = tbody[0].getElementsByTagName("tr"); 
-
-		for(var count = 0; trs.length > count; count++) {
-			var tds = trs[count].childNodes;
-			total += Number(tds[10].textContent);
-		}
-
-		$("#total").text(total);
-		});
-	</script>
 	
 	<div id="footer">
 		<p>版权所有: 王祥   联系方式：376752150@qq.com</p>

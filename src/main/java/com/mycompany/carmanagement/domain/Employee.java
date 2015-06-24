@@ -14,7 +14,7 @@ public class Employee {
     private String name = "";
     private String description = "";
 
-    protected Employee() {}
+    public Employee() {}
     protected Employee(long id) {this.id = id;}
 
     public Employee(String firstName, String lastName) {

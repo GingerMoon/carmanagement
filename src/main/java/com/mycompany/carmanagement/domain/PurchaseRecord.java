@@ -18,7 +18,7 @@ public class PurchaseRecord {
 
     private long id = -1;
     private Car car;
-    private Customer customer;
+    private Provider provider;
     private Employee employee;
     private long price = -1;
     private Date beginDate;
@@ -27,7 +27,7 @@ public class PurchaseRecord {
 
     public PurchaseRecord() {
     	this.car = new Car();
-    	this.customer = new Customer();
+    	this.provider = new Provider();
     	this.employee = new Employee();
     	this.beginDate = new Date();
     	this.endDate = new Date();
@@ -58,13 +58,13 @@ public class PurchaseRecord {
 	}
 
 	@ManyToOne
-	@JoinColumn(name = "customer_id")
-	public Customer getCustomer() {
-		return customer;
+	@JoinColumn(name = "provider_id")
+	public Provider getProvider() {
+		return provider;
 	}
 
-	public void setCustomer(Customer customer) {
-		this.customer = customer;
+	public void setProvider(Provider provider) {
+		this.provider = provider;
 	}
 
 	@ManyToOne
@@ -113,12 +113,12 @@ public class PurchaseRecord {
 		this.description = description;
 	}
 
-	public PurchaseRecord(long id, Car car, Customer customer, Employee employee,
+	public PurchaseRecord(long id, Car car, Provider provider, Employee employee,
 			long price, Date beginDate, Date endDate, String description) {
 		super();
 		this.id = id;
 		this.car = car;
-		this.customer = customer;
+		this.provider = provider;
 		this.employee = employee;
 		this.price = price;
 		this.beginDate = beginDate;

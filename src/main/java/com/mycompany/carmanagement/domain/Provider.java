@@ -14,7 +14,7 @@ public class Provider {
     private String name = "";
     private String description = "";
 
-    protected Provider() { }
+    public Provider() { }
     protected Provider(long id) { this.id = id;}
 
     public Provider(String firstName, String lastName) {

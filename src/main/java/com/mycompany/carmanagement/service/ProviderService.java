@@ -3,56 +3,92 @@ package com.mycompany.carmanagement.service;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import com.mycompany.carmanagement.domain.Car;
 import com.mycompany.carmanagement.domain.Provider;
+import com.mycompany.carmanagement.domain.Provider;
+import com.mycompany.carmanagement.exception.BusinessException;
 import com.mycompany.carmanagement.respository.CarRepository;
 import com.mycompany.carmanagement.respository.ProviderRepository;
+import com.mycompany.carmanagement.respository.ProviderRepository;
+import com.mycompany.carmanagement.web.json.bean.ProviderJsonBean;
 
 @Service
 public class ProviderService {
 	
-	public static final String NA = "NA";
-	@Autowired
-    ProviderRepository repositoryProvider;
-    
-    public void save(Provider provider) {
-    	if(provider.getName().isEmpty()) {
-    		provider.setName(NA);
-    	}
-    	if(provider.getDescription().isEmpty()) {
-    		provider.setDescription(NA);
-    	}
-    	this.repositoryProvider.save(provider);
-    }
-    
-    public void delete(Provider provider) {
-    	List<Provider> providers = find(provider);
-    	for(Provider i : providers) {
-    		this.repositoryProvider.delete(i);
-		}
-    }
+	private static final Logger LOG = LoggerFactory
+			.getLogger(ProviderService.class);
 
-    public List<Provider> find(Provider provider) {
-    	long id = provider.getId();
-    	String name = provider.getName().isEmpty()? "%" : provider.getName();
-    	String description = provider.getDescription().isEmpty()? "%" : provider.getDescription();
-    	
-    	List<Provider> providers = null;
-    	if(id == -1) {
-    		providers = this.repositoryProvider.findWithoutID(name, description);
-    	}
-    	else {
-    		Provider e = this.repositoryProvider.findById(id);
-    		providers = new ArrayList<Provider> ();
-    		providers.add(e);
-    	}
-    	return providers;
-    }
-    
-	public List<Provider> findAll() {
-		return (List<Provider>) this.repositoryProvider.findAll();
+	@Autowired
+	ProviderRepository providerRepository;
+
+	public long getCount() {
+		return this.providerRepository.count();
+	}
+
+	public List<ProviderJsonBean> getAll(int jtStartIndex, int jtPageSize)
+			throws BusinessException {
+		List<ProviderJsonBean> jsnProviders = new ArrayList<ProviderJsonBean>();
+		try {
+			Page<Provider> providers = this.providerRepository
+					.findAll(new PageRequest(jtStartIndex, jtPageSize));
+			for (Provider provider : providers) {
+				ProviderJsonBean jsnProvider = new ProviderJsonBean();
+				jsnProvider.setId(new Long(provider.getId()).toString());
+				jsnProvider.setName(provider.getName());
+				jsnProvider.setDescription(provider.getDescription());
+				jsnProviders.add(jsnProvider);
+			}
+		} catch (Exception e) {
+			LOG.error("Exception thrown while listing providers from - "
+					+ jtStartIndex + " to " + jtPageSize + " - "
+					+ e.getMessage());
+			throw new BusinessException(
+					"Exception while listing expenses from - " + jtStartIndex
+							+ " to " + jtPageSize + " - " + e.getMessage());
+		}
+		return jsnProviders;
+	}
+
+	public void add(ProviderJsonBean jsnProviderBean) throws BusinessException {
+		try {
+			Provider provider = new Provider();
+			provider.setName(jsnProviderBean.getName());
+			provider.setDescription(jsnProviderBean.getDescription());
+			this.providerRepository.save(provider);
+		} catch (Exception e) {
+			LOG.error("Exception thrown while adding provider"
+					+ jsnProviderBean.toString() + e.getMessage());
+			throw new BusinessException(
+					"Exception thrown while adding provider"
+							+ jsnProviderBean.toString() + e.getMessage());
+		}
+	}
+
+	public void update(ProviderJsonBean jsnProviderBean)
+			throws BusinessException {
+		try {
+			Provider provider = new Provider();
+			provider.setId(new Long(jsnProviderBean.getId()));
+			provider.setName(jsnProviderBean.getName());
+			provider.setDescription(jsnProviderBean.getDescription());
+			this.providerRepository.save(provider);
+		} catch (Exception e) {
+			LOG.error("Exception thrown while adding provider"
+					+ jsnProviderBean.toString() + e.getMessage());
+			throw new BusinessException(
+					"Exception thrown while adding provider"
+							+ jsnProviderBean.toString() + e.getMessage());
+		}
+	}
+
+	public void delete(Long providerId) {
+		this.providerRepository.delete(providerId);
 	}
 }
