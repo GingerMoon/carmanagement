@@ -12,6 +12,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.mycompany.carmanagement.domain.PurchaseRecord;
@@ -22,10 +23,9 @@ import com.mycompany.carmanagement.web.json.bean.PurchaseRecordJsonBean;
 @Service
 public class PurchaseRecordService {
 
-	private static DateFormat dateFormat =new SimpleDateFormat("yyyy-MM-dd");
-	
-	private static final Logger LOG = LoggerFactory
-			.getLogger(PurchaseRecordService.class);
+	private static DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+
+	private static final Logger LOG = LoggerFactory.getLogger(PurchaseRecordService.class);
 
 	@Autowired
 	PurchaseRecordRepository purchaseRecordRepository;
@@ -45,7 +45,7 @@ public class PurchaseRecordService {
 		jsnPurchaseRecord.setPrice(new Long(purchaseRecord.getPrice()).toString());
 		return jsnPurchaseRecord;
 	}
-	
+
 	private PurchaseRecord json2bean(PurchaseRecordJsonBean jsnPurchaseRecord) throws ParseException {
 		PurchaseRecord purchaseRecord = new PurchaseRecord();
 		purchaseRecord.setId(new Long(jsnPurchaseRecord.getId()));
@@ -61,28 +61,68 @@ public class PurchaseRecordService {
 		purchaseRecord.setPrice(new Long(jsnPurchaseRecord.getPrice()));
 		return purchaseRecord;
 	}
-	
-	public long getCount() {
+
+	public long getCount(PurchaseRecord purchaseRecord) {
 		return this.purchaseRecordRepository.count();
 	}
 
-	public List<PurchaseRecordJsonBean> getAll(int jtStartIndex, int jtPageSize)
-			throws BusinessException {
+	public List<PurchaseRecordJsonBean> getAll(PurchaseRecord purchaseRecord, Pageable pageable) throws BusinessException {
 		List<PurchaseRecordJsonBean> jsnPurchaseRecords = new ArrayList<PurchaseRecordJsonBean>();
 		try {
-			Page<PurchaseRecord> purchaseRecords = this.purchaseRecordRepository
-					.findAll(new PageRequest(jtStartIndex, jtPageSize));
-			for (PurchaseRecord purchaseRecord : purchaseRecords) {
-				PurchaseRecordJsonBean jsnPurchaseRecord = bean2json(purchaseRecord);
+			long id = purchaseRecord.getId();
+
+			List<PurchaseRecord> purchaseRecords = null;
+
+			if (id == -1) {
+				if ((purchaseRecord.getCar().getId() != -1) && (purchaseRecord.getProvider().getId() != -1) // 1,1,1
+						&& (purchaseRecord.getEmployee().getId() != -1)) {
+					purchaseRecords = this.purchaseRecordRepository.findByCarIdProviderIdEmployeeId(purchaseRecord.getCar().getId(),
+							purchaseRecord.getProvider().getId(), purchaseRecord.getEmployee().getId(), purchaseRecord.getBeginDate(),
+							purchaseRecord.getEndDate(), pageable);
+				} else if ((purchaseRecord.getCar().getId() == -1) && (purchaseRecord.getProvider().getId() == -1) // -1,-1,-1
+						&& (purchaseRecord.getEmployee().getId() == -1)) {
+					purchaseRecords = this.purchaseRecordRepository.findByTime(purchaseRecord.getBeginDate(), purchaseRecord.getEndDate(),
+							pageable);
+				} else if ((purchaseRecord.getCar().getId() != -1) && (purchaseRecord.getProvider().getId() != -1) // 1,1,-1
+						&& (purchaseRecord.getEmployee().getId() == -1)) {
+					purchaseRecords = this.purchaseRecordRepository.findByCarIdProviderId(purchaseRecord.getCar().getId(), purchaseRecord
+							.getProvider().getId(), purchaseRecord.getBeginDate(), purchaseRecord.getEndDate(), pageable);
+				} else if ((purchaseRecord.getCar().getId() != -1) && (purchaseRecord.getProvider().getId() == -1) // 1,-1,1
+						&& (purchaseRecord.getEmployee().getId() != -1)) {
+					purchaseRecords = this.purchaseRecordRepository.findByCarIdEmployeeId(purchaseRecord.getCar().getId(), purchaseRecord
+							.getEmployee().getId(), purchaseRecord.getBeginDate(), purchaseRecord.getEndDate(), pageable);
+				} else if ((purchaseRecord.getCar().getId() == -1) && (purchaseRecord.getProvider().getId() != -1) // -1,1,1
+						&& (purchaseRecord.getEmployee().getId() != -1)) {
+					purchaseRecords = this.purchaseRecordRepository.findByProviderIdEmployeeId(purchaseRecord.getProvider().getId(),
+							purchaseRecord.getEmployee().getId(), purchaseRecord.getBeginDate(), purchaseRecord.getEndDate(), pageable);
+				} else if ((purchaseRecord.getCar().getId() != -1) && (purchaseRecord.getProvider().getId() == -1) // 1,-1,-1
+						&& (purchaseRecord.getEmployee().getId() == -1)) {
+					purchaseRecords = this.purchaseRecordRepository.findByCarId(purchaseRecord.getCar().getId(),
+							purchaseRecord.getBeginDate(), purchaseRecord.getEndDate(), pageable);
+				} else if ((purchaseRecord.getCar().getId() == -1) && (purchaseRecord.getProvider().getId() != -1) // -1,1,-1
+						&& (purchaseRecord.getEmployee().getId() == -1)) {
+					purchaseRecords = this.purchaseRecordRepository.findByProviderId(purchaseRecord.getProvider().getId(),
+							purchaseRecord.getBeginDate(), purchaseRecord.getEndDate(), pageable);
+				} else if ((purchaseRecord.getCar().getId() == -1) && (purchaseRecord.getProvider().getId() == -1) // -1,-1,1
+						&& (purchaseRecord.getEmployee().getId() != -1)) {
+					purchaseRecords = this.purchaseRecordRepository.findByEmployeeId(purchaseRecord.getEmployee().getId(),
+							purchaseRecord.getBeginDate(), purchaseRecord.getEndDate(), pageable);
+				}
+			} else {
+				PurchaseRecord e = this.purchaseRecordRepository.findById(id);
+				purchaseRecords = new ArrayList<PurchaseRecord>();
+				purchaseRecords.add(e);
+			}
+
+			for (PurchaseRecord entity : purchaseRecords) {
+				PurchaseRecordJsonBean jsnPurchaseRecord = bean2json(entity);
 				jsnPurchaseRecords.add(jsnPurchaseRecord);
 			}
 		} catch (Exception e) {
-			LOG.error("Exception thrown while listing purchaseRecords from - "
-					+ jtStartIndex + " to " + jtPageSize + " - "
-					+ e.getMessage());
-			throw new BusinessException(
-					"Exception while listing expenses from - " + jtStartIndex
-							+ " to " + jtPageSize + " - " + e.getMessage());
+			LOG.error("Exception thrown while listing purchaseRecords from - " + pageable.getPageNumber() + " to " + pageable.getPageSize()
+					+ " - " + e.getMessage());
+			throw new BusinessException("Exception while listing expenses from - " + pageable.getPageNumber() + " to "
+					+ pageable.getPageSize() + " - " + e.getMessage());
 		}
 		return jsnPurchaseRecords;
 	}
@@ -92,25 +132,18 @@ public class PurchaseRecordService {
 			PurchaseRecord purchaseRecord = json2bean(jsnPurchaseRecordBean);
 			this.purchaseRecordRepository.save(purchaseRecord);
 		} catch (Exception e) {
-			LOG.error("Exception thrown while adding purchaseRecord"
-					+ jsnPurchaseRecordBean.toString() + e.getMessage());
-			throw new BusinessException(
-					"Exception thrown while adding purchaseRecord"
-							+ jsnPurchaseRecordBean.toString() + e.getMessage());
+			LOG.error("Exception thrown while adding purchaseRecord" + jsnPurchaseRecordBean.toString() + e.getMessage());
+			throw new BusinessException("Exception thrown while adding purchaseRecord" + jsnPurchaseRecordBean.toString() + e.getMessage());
 		}
 	}
 
-	public void update(PurchaseRecordJsonBean jsnPurchaseRecordBean)
-			throws BusinessException {
+	public void update(PurchaseRecordJsonBean jsnPurchaseRecordBean) throws BusinessException {
 		try {
 			PurchaseRecord purchaseRecord = json2bean(jsnPurchaseRecordBean);
 			this.purchaseRecordRepository.save(purchaseRecord);
 		} catch (Exception e) {
-			LOG.error("Exception thrown while adding purchaseRecord"
-					+ jsnPurchaseRecordBean.toString() + e.getMessage());
-			throw new BusinessException(
-					"Exception thrown while adding purchaseRecord"
-							+ jsnPurchaseRecordBean.toString() + e.getMessage());
+			LOG.error("Exception thrown while adding purchaseRecord" + jsnPurchaseRecordBean.toString() + e.getMessage());
+			throw new BusinessException("Exception thrown while adding purchaseRecord" + jsnPurchaseRecordBean.toString() + e.getMessage());
 		}
 	}
 

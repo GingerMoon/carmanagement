@@ -35,7 +35,6 @@ public class PurchaseRecord {
     	
     }
 	
-	
     @Id
 	@GeneratedValue(strategy = IDENTITY)
 	@Column(name = "id")

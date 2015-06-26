@@ -5,6 +5,7 @@ import java.text.SimpleDateFormat;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.format.datetime.DateFormatter;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -16,7 +17,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.ModelAndView;
-
 import com.mycompany.carmanagement.domain.PurchaseRecord;
 import com.mycompany.carmanagement.service.PurchaseRecordService;
 import com.mycompany.carmanagement.service.PurchaseRecordService;
@@ -39,12 +39,15 @@ public class PurchaseRecordController {
 	@RequestMapping(value = "/getAll", method = RequestMethod.POST)
 	@ResponseBody
 	public PurchaseRecordListJsonResponse getAll(@RequestParam int jtStartIndex,
-			@RequestParam int jtPageSize) {
+			@RequestParam int jtPageSize, @ModelAttribute("purchaseRecord") PurchaseRecord purchaseRecord, BindingResult result) {
+		if (result.hasErrors()) {
+            int i = 1;
+        }
 		PurchaseRecordListJsonResponse jstr;
 		List<PurchaseRecordJsonBean> purchaseRecordList;
 		try {
-			long purchaseRecordCount = purchaseRecordService.getCount();
-			purchaseRecordList = purchaseRecordService.getAll(jtStartIndex/jtPageSize, jtPageSize);;
+			long purchaseRecordCount = purchaseRecordService.getCount(purchaseRecord);
+			purchaseRecordList = purchaseRecordService.getAll(purchaseRecord, new PageRequest(jtStartIndex/jtPageSize, jtPageSize));
 			jstr = new PurchaseRecordListJsonResponse("OK", purchaseRecordList,
 					purchaseRecordCount);
 		} catch (Exception e) {
@@ -54,6 +57,7 @@ public class PurchaseRecordController {
 		return jstr;
 	}
 
+	
 	@RequestMapping(value = "/add", method = RequestMethod.POST)
 	@ResponseBody
 	public PurchaseRecordJsonResponse add(
