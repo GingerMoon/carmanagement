@@ -37,6 +37,7 @@ dependencies {
     compile("org.springframework.boot:spring-boot-starter-thymeleaf")
     compile("org.springframework.boot:spring-boot-starter-web")
     compile("org.springframework.boot:spring-boot-starter-ws")
+    compile 'org.apache.commons:commons-lang3:3.0.1'
     runtime("mysql:mysql-connector-java")
     testCompile("org.springframework.boot:spring-boot-starter-test") 
     providedRuntime 'org.springframework.boot:spring-boot-starter-tomcat'

@@ -40,19 +40,18 @@
 
 			function getXHRparams() {
 				return {
-					id : checkDefault($('#id').val()),
-					carId : checkDefault($('#carId').val()),
-					employeeId : checkDefault($('#employeeId').val()),
-					providerId : checkDefault($('#providerId').val()),
-					beginDate : $('#beginDate').val(),
-					endDate : $('#endDate').val()
+					"id" : checkDefault($('#id').val()),
+					"car.id" : checkDefault($('#carId').val()),
+					"employee.id" : checkDefault($('#employeeId').val()),
+					"provider.id" : checkDefault($('#providerId').val()),
+					"beginDate" : $('#beginDate').val(),
+					"endDate" : $('#endDate').val()
 				}
 			}
 
 			$(document).ready(function() {
 				$.datepicker.setDefaults($.datepicker.regional["zh-CN"]);
 				$.datepicker.setDefaults({
-					showOn : "both",
 					dateFormat : "yy-mm-dd",
 					changeMonth : true,
 					changeYear : true
