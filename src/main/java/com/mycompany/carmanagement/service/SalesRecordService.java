@@ -9,18 +9,10 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
-import com.mycompany.carmanagement.domain.Car;
-import com.mycompany.carmanagement.domain.Customer;
-import com.mycompany.carmanagement.domain.Employee;
 import com.mycompany.carmanagement.domain.SalesRecord;
 import com.mycompany.carmanagement.exception.BusinessException;
-import com.mycompany.carmanagement.respository.CarRepository;
-import com.mycompany.carmanagement.respository.CustomerRepository;
-import com.mycompany.carmanagement.respository.EmployeeRepository;
 import com.mycompany.carmanagement.respository.SalesRecordRepository;
 import com.mycompany.carmanagement.web.json.bean.SalesRecordJsonBean;
 
@@ -66,22 +58,67 @@ public class SalesRecordService {
 		return salesRecord;
 	}
 
-	public long getCount() {
+	public long getCount(SalesRecord salesRecord) {
 		return this.salesRecordRepository.count();
 	}
 
-	public List<SalesRecordJsonBean> getAll(int jtStartIndex, int jtPageSize) throws BusinessException {
+	public List<SalesRecordJsonBean> getAll(SalesRecord salesRecord, Pageable pageable) throws BusinessException {
 		List<SalesRecordJsonBean> jsnSalesRecords = new ArrayList<SalesRecordJsonBean>();
 		try {
-			Page<SalesRecord> salesRecords = this.salesRecordRepository.findAll(new PageRequest(jtStartIndex, jtPageSize));
-			for (SalesRecord salesRecord : salesRecords) {
-				SalesRecordJsonBean jsnSalesRecord = bean2json(salesRecord);
+			long id = salesRecord.getId();
+
+			List<SalesRecord> salesRecords = null;
+
+			if (id == -1) {
+				if ((salesRecord.getCar().getId() != -1) && (salesRecord.getCustomer().getId() != -1) // 1,1,1
+						&& (salesRecord.getEmployee().getId() != -1)) {
+					salesRecords = this.salesRecordRepository.findByCarIdCustomerIdEmployeeId(salesRecord.getCar().getId(),
+							salesRecord.getCustomer().getId(), salesRecord.getEmployee().getId(), salesRecord.getBeginDate(),
+							salesRecord.getEndDate(), pageable);
+				} else if ((salesRecord.getCar().getId() == -1) && (salesRecord.getCustomer().getId() == -1) // -1,-1,-1
+						&& (salesRecord.getEmployee().getId() == -1)) {
+					salesRecords = this.salesRecordRepository.findByTime(salesRecord.getBeginDate(), salesRecord.getEndDate(),
+							pageable);
+				} else if ((salesRecord.getCar().getId() != -1) && (salesRecord.getCustomer().getId() != -1) // 1,1,-1
+						&& (salesRecord.getEmployee().getId() == -1)) {
+					salesRecords = this.salesRecordRepository.findByCarIdCustomerId(salesRecord.getCar().getId(), salesRecord
+							.getCustomer().getId(), salesRecord.getBeginDate(), salesRecord.getEndDate(), pageable);
+				} else if ((salesRecord.getCar().getId() != -1) && (salesRecord.getCustomer().getId() == -1) // 1,-1,1
+						&& (salesRecord.getEmployee().getId() != -1)) {
+					salesRecords = this.salesRecordRepository.findByCarIdEmployeeId(salesRecord.getCar().getId(), salesRecord
+							.getEmployee().getId(), salesRecord.getBeginDate(), salesRecord.getEndDate(), pageable);
+				} else if ((salesRecord.getCar().getId() == -1) && (salesRecord.getCustomer().getId() != -1) // -1,1,1
+						&& (salesRecord.getEmployee().getId() != -1)) {
+					salesRecords = this.salesRecordRepository.findByCustomerIdEmployeeId(salesRecord.getCustomer().getId(),
+							salesRecord.getEmployee().getId(), salesRecord.getBeginDate(), salesRecord.getEndDate(), pageable);
+				} else if ((salesRecord.getCar().getId() != -1) && (salesRecord.getCustomer().getId() == -1) // 1,-1,-1
+						&& (salesRecord.getEmployee().getId() == -1)) {
+					salesRecords = this.salesRecordRepository.findByCarId(salesRecord.getCar().getId(),
+							salesRecord.getBeginDate(), salesRecord.getEndDate(), pageable);
+				} else if ((salesRecord.getCar().getId() == -1) && (salesRecord.getCustomer().getId() != -1) // -1,1,-1
+						&& (salesRecord.getEmployee().getId() == -1)) {
+					salesRecords = this.salesRecordRepository.findByCustomerId(salesRecord.getCustomer().getId(),
+							salesRecord.getBeginDate(), salesRecord.getEndDate(), pageable);
+				} else if ((salesRecord.getCar().getId() == -1) && (salesRecord.getCustomer().getId() == -1) // -1,-1,1
+						&& (salesRecord.getEmployee().getId() != -1)) {
+					salesRecords = this.salesRecordRepository.findByEmployeeId(salesRecord.getEmployee().getId(),
+							salesRecord.getBeginDate(), salesRecord.getEndDate(), pageable);
+				}
+			} else {
+				SalesRecord e = this.salesRecordRepository.findById(id);
+				salesRecords = new ArrayList<SalesRecord>();
+				salesRecords.add(e);
+			}
+
+			for (SalesRecord entity : salesRecords) {
+				SalesRecordJsonBean jsnSalesRecord = bean2json(entity);
 				jsnSalesRecords.add(jsnSalesRecord);
 			}
 		} catch (Exception e) {
-			LOG.error("Exception thrown while listing salesRecords from - " + jtStartIndex + " to " + jtPageSize + " - " + e.getMessage());
-			throw new BusinessException("Exception while listing expenses from - " + jtStartIndex + " to " + jtPageSize + " - "
-					+ e.getMessage());
+			LOG.error("Exception thrown while listing salesRecords from - " + pageable.getPageNumber() + " to " + pageable.getPageSize()
+					+ " - " + e.getMessage());
+			throw new BusinessException("Exception while listing expenses from - " + pageable.getPageNumber() + " to "
+					+ pageable.getPageSize() + " - " + e.getMessage());
 		}
 		return jsnSalesRecords;
 	}
@@ -109,5 +146,4 @@ public class SalesRecordService {
 	public void delete(Long salesRecordId) {
 		this.salesRecordRepository.delete(salesRecordId);
 	}
-
 }

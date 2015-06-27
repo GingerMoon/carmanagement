@@ -1,12 +1,63 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
-	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<html xmlns='http://www.w3.org/1999/xhtml' xmlns:th='http://www.thymeleaf.org'
+	xmlns:sec='http://www.thymeleaf.org/thymeleaf-extras-springsecurity3'>
 
 <body>
-	<div class="container" th:fragment="content">
-		<div id="SalesRecordTableContainer" style="width: 99%;"></div>
-		<script th:inline="javascript">
+	<div class='container' th:fragment='content'>
+
+		<div class='filtering'>
+			<form>
+				<fieldset>
+					<legend> 查询条件 </legend>
+					<table>
+						<tr>
+							<td>销售记录编号： <input type='text' name='id' id='id' /> 车辆编号: <input type='text' name='carId' id='carId' /></td>
+						</tr>
+						<tr>
+							<td>员工编号: <input type='text' name='employeeId' id='employeeId' /> 客户编号: <input type='text'
+								name='customerId' id='customerId' /></td>
+						</tr>
+						<tr>
+							<td>开始时间: <input class='date1' name='beginDate' id='beginDate' /> 结束时间: <input class='date1' name='endDate'
+								id='endDate' /></td>
+						</tr>
+						<tr>
+							<td colspan="2" align="center"><button type='submit' id='LoadRecordsButton'>查询</button></td>
+						</tr>
+					</table>
+				</fieldset>
+			</form>
+		</div>
+
+		<div id='SalesRecordTableContainer' style='width: 99%;'></div>
+		<script th:inline='javascript'>
+			function checkDefault(value) {
+				if (value == '所有')
+					return -1;
+				else
+					return value;
+			}
+
+			function getXHRparams() {
+				return {
+					"id" : checkDefault($('#id').val()),
+					"car.id" : checkDefault($('#carId').val()),
+					"employee.id" : checkDefault($('#employeeId').val()),
+					"customer.id" : checkDefault($('#customerId').val()),
+					"beginDate" : $('#beginDate').val(),
+					"endDate" : $('#endDate').val()
+				}
+			}
+
 			$(document).ready(function() {
+				$.datepicker.setDefaults($.datepicker.regional["zh-CN"]);
+				$.datepicker.setDefaults({
+					dateFormat : "yy-mm-dd",
+					changeMonth : true,
+					changeYear : true
+				});
+				$('.date1').attr('placeholder', '(年-月-日)').datepicker();
+
 				//setup the jtable that will display the results
 				$('#SalesRecordTableContainer').jtable({
 					title : '销售信息表',
@@ -31,58 +82,87 @@
 						},
 						carId : {
 							title : '车辆编号',
-							width : '5%'
+							width : '100%'
 						},
 						carName : {
 							title : '车辆名称',
-							width : '10%'
+							width : '100%'
 						},
 						employeeId : {
 							title : '员工编号',
-							width : '5%'
+							width : '100%'
 						},
 						employeeName : {
 							title : '员工姓名',
-							width : '5%'
+							width : '100%'
 						},
 						customerId : {
 							title : '客户编号',
-							width : '5%'
+							width : '100%'
 						},
 						customerName : {
 							title : '客户名称',
-							width : '10%'
+							width : '100%'
 						},
 						beginDate : {
 							title : '开始时间',
-							displayFormat : 'yyyy-mm-dd',
-							width : '20%'
+							type : 'date',
+							displayFormat : 'yy-mm-dd',
+							width : '100%'
 						},
 						endDate : {
 							title : '结束时间',
-							displayFormat : 'yyyy-mm-dd',
-							width : '20%'
+							type : 'date',
+							displayFormat : 'yy-mm-dd',
+							width : '100%'
 						},
 						description : {
 							title : '描述',
-							width : '30%'
+							width : '100%'
 						},
 						price : {
 							title : '价格',
-							width : '10%'
+							width : '100%'
 						}
 					},
 					//Register to selectionChanged event to hanlde events                                     
 					recordAdded : function(event, data) {
 						//after record insertion, reload the records
-						$('#SalesRecordTableContainer').jtable('load');
+						$('#SalesRecordTableContainer').jtable('load', getXHRparams());
 					},
 					recordUpdated : function(event, data) {
 						//after record updation, reload the records
-						$('#SalesRecordTableContainer').jtable('load');
+						$('#SalesRecordTableContainer').jtable('load', getXHRparams());
 					}
 				});
-				$('#SalesRecordTableContainer').jtable('load');
+
+				//Re-load records when user click 'load records' button.
+				$('#LoadRecordsButton').click(function(e) {
+					e.preventDefault();
+					$('#SalesRecordTableContainer').jtable('load', getXHRparams());
+				});
+
+				if ($('#id').val() == "") {
+					$('#id').val('所有');
+				}
+				if ($('#carId').val() == "") {
+					$('#carId').val('所有');
+				}
+				if ($('#employeeId').val() == "") {
+					$('#employeeId').val('所有');
+				}
+				if ($('#customerId').val() == "") {
+					$('#customerId').val('所有');
+				}
+				if ($('#beginDate').val() == "") {
+					$('#beginDate').val(new Date().getFullYear() + '-01-01');
+				}
+				if ($('#endDate').val() == "") {
+					$('#endDate').val(new Date().getFullYear() + '-12-31');
+				}
+
+				//Load all records when page is first shown
+				$('#LoadRecordsButton').click();
 			});
 		</script>
 	</div>

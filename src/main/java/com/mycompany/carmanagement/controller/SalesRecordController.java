@@ -1,11 +1,9 @@
 package com.mycompany.carmanagement.controller;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.format.datetime.DateFormatter;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
@@ -14,15 +12,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.context.request.WebRequest;
-import org.springframework.web.servlet.ModelAndView;
 
-import com.mycompany.carmanagement.domain.Car;
-import com.mycompany.carmanagement.domain.Employee;
 import com.mycompany.carmanagement.domain.SalesRecord;
-import com.mycompany.carmanagement.respository.EmployeeRepository;
-import com.mycompany.carmanagement.respository.SalesRecordRepository;
-import com.mycompany.carmanagement.service.SalesRecordService;
 import com.mycompany.carmanagement.service.SalesRecordService;
 import com.mycompany.carmanagement.web.json.bean.SalesRecordJsonBean;
 import com.mycompany.carmanagement.web.json.response.SalesRecordJsonResponse;
@@ -42,13 +33,13 @@ public class SalesRecordController {
 
 	@RequestMapping(value = "/getAll", method = RequestMethod.POST)
 	@ResponseBody
-	public SalesRecordListJsonResponse getAll(@RequestParam int jtStartIndex, @RequestParam int jtPageSize) {
+	public SalesRecordListJsonResponse getAll(@RequestParam int jtStartIndex, @RequestParam int jtPageSize,
+			@ModelAttribute("salesRecord") SalesRecord salesRecord, BindingResult result) {
 		SalesRecordListJsonResponse jstr;
 		List<SalesRecordJsonBean> salesRecordList;
 		try {
-			long salesRecordCount = salesRecordService.getCount();
-			salesRecordList = salesRecordService.getAll(jtStartIndex / jtPageSize, jtPageSize);
-			;
+			long salesRecordCount = salesRecordService.getCount(salesRecord);
+			salesRecordList = salesRecordService.getAll(salesRecord, new PageRequest(jtStartIndex / jtPageSize, jtPageSize));
 			jstr = new SalesRecordListJsonResponse("OK", salesRecordList, salesRecordCount);
 		} catch (Exception e) {
 			jstr = new SalesRecordListJsonResponse("ERROR", e.getMessage());
