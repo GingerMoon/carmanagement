@@ -18,5 +18,5 @@ public interface CarRepository extends PagingAndSortingRepository<Car, Long> {
 	List<Car> findWithoutID(@Param("name") String name, @Param("description") String description);
 
 	Car findById(long id);
-	
+
 }

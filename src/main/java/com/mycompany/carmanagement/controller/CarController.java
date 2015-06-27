@@ -63,8 +63,7 @@ public class CarController {
 
 	@RequestMapping(value = "/update", method = RequestMethod.POST)
 	@ResponseBody
-	public CarJsonResponse update(@ModelAttribute CarJsonBean carBean,
-			BindingResult result) {
+	public CarJsonResponse update(@ModelAttribute CarJsonBean carBean, BindingResult result) {
 		CarJsonResponse jsonJtableResponse;
 		if (result.hasErrors()) {
 			jsonJtableResponse = new CarJsonResponse("ERROR", "Form invalid");

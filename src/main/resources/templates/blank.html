@@ -1,62 +1,54 @@
 <!DOCTYPE html>
-<html 
-xmlns="http://www.w3.org/1999/xhtml" 
-xmlns:th="http://www.thymeleaf.org" 
-xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
-        
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+
 <script src="./jtableResources/jquery.min.js" type="text/javascript"></script>
 
 <script src="./jtableResources/jquery-ui-1.11.4.custom/jquery-ui.min.js" type="text/javascript"></script>
 <link href="./jtableResources/jquery-ui-1.11.4.custom/jquery-ui.min.css" rel="stylesheet" type="text/css" />
 
-<script src="./jtableResources/jtable/jquery.jtable.min.js" type="text/javascript"></script>     
+<script src="./jtableResources/jtable/jquery.jtable.min.js" type="text/javascript"></script>
 <link href="./jtableResources/jtable/themes/jqueryui/jtable_jqueryui.css" rel="stylesheet" type="text/css" />
 
-<script src="./jtableResources/jtable/localization/jquery.jtable.zh-CN.js" type="text/javascript" ></script>
-<script src="./jtableResources/datepicker-zh-CN.js" type="text/javascript" ></script>
-   
+<script src="./jtableResources/jtable/localization/jquery.jtable.zh-CN.js" type="text/javascript"></script>
+<script src="./jtableResources/datepicker-zh-CN.js" type="text/javascript"></script>
+
 <head>
-	<title>车辆管理系统</title>
-	<style>
-		#header {
-	    background-color:rgb(30,144,255);
-	    color:white;
-	    text-align:center;
-	    padding:5px;
-	    font-size:40px;
-	    font-weight: bold;
-	    }
-	    
-	    #nav {
-	    background-color:rgb(255,235,205);
-	    color:rgb(255,165,0);
-	    padding:5px;
-	    font-size:25px;
-	    font-weight: bold;
-	    }
-	    
-	}
-	</style>
+<title>车辆管理系统</title>
+<style>
+#header {
+	background-color: rgb(30, 144, 255);
+	color: white;
+	text-align: center;
+	padding: 5px;
+	font-size: 40px;
+	font-weight: bold;
+}
+
+#nav {
+	background-color: rgb(255, 235, 205);
+	color: rgb(255, 165, 0);
+	padding: 5px;
+	font-size: 25px;
+	font-weight: bold;
+}
+}
+</style>
 </head>
 <body>
 	<div id="header">江西宜昌运输有限公司</div>
-	
+
 	<div id="nav">
-		<a th:href="@{/}">首页</a>
-		<a th:href="@{/car}">车辆信息</a>
-		<a th:href="@{/customer}">客户信息</a>
-		<a th:href="@{/provider}">供应商信息</a>
-		<a th:href="@{/employee}">员工信息</a>
-		<a th:href="@{/salesRecord}">销售记录信息</a>
-		<a th:href="@{/purchaseRecord}">采购记录信息</a>
+		<a th:href="@{/}">首页</a> <a th:href="@{/car}">车辆信息</a> <a th:href="@{/customer}">客户信息</a> <a th:href="@{/provider}">供应商信息</a>
+		<a th:href="@{/employee}">员工信息</a> <a th:href="@{/salesRecord}">销售记录信息</a> <a th:href="@{/purchaseRecord}">采购记录信息</a>
 	</div>
-	
+
 	<div id="content">
 		<div th:replace="${view} :: content"></div>
 	</div>
-	
+
 	<div id="footer">
-		<p>版权所有: 王祥   联系方式：376752150@qq.com</p>
-	</div>	
+		<p>版权所有: 王祥 联系方式：376752150@qq.com</p>
+	</div>
 </body>
 </html>

@@ -7,13 +7,13 @@ package com.mycompany.carmanagement.web.json.bean;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class CarJsonBean {
-    private String id;
-	
-    private String name;
+	private String id;
 
-    private String description;
+	private String name;
 
-    @JsonProperty("id")
+	private String description;
+
+	@JsonProperty("id")
 	public String getId() {
 		return id;
 	}
@@ -40,5 +40,4 @@ public class CarJsonBean {
 		this.description = description;
 	}
 
-    
 }

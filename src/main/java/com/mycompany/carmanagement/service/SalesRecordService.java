@@ -26,11 +26,10 @@ import com.mycompany.carmanagement.web.json.bean.SalesRecordJsonBean;
 
 @Service
 public class SalesRecordService {
-	
-private static DateFormat dateFormat =new SimpleDateFormat("yyyy-MM-dd");
-	
-	private static final Logger LOG = LoggerFactory
-			.getLogger(SalesRecordService.class);
+
+	private static DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+
+	private static final Logger LOG = LoggerFactory.getLogger(SalesRecordService.class);
 
 	@Autowired
 	SalesRecordRepository salesRecordRepository;
@@ -50,7 +49,7 @@ private static DateFormat dateFormat =new SimpleDateFormat("yyyy-MM-dd");
 		jsnSalesRecord.setPrice(new Long(salesRecord.getPrice()).toString());
 		return jsnSalesRecord;
 	}
-	
+
 	private SalesRecord json2bean(SalesRecordJsonBean jsnSalesRecord) throws ParseException {
 		SalesRecord salesRecord = new SalesRecord();
 		salesRecord.setId(new Long(jsnSalesRecord.getId()));
@@ -66,28 +65,23 @@ private static DateFormat dateFormat =new SimpleDateFormat("yyyy-MM-dd");
 		salesRecord.setPrice(new Long(jsnSalesRecord.getPrice()));
 		return salesRecord;
 	}
-	
+
 	public long getCount() {
 		return this.salesRecordRepository.count();
 	}
 
-	public List<SalesRecordJsonBean> getAll(int jtStartIndex, int jtPageSize)
-			throws BusinessException {
+	public List<SalesRecordJsonBean> getAll(int jtStartIndex, int jtPageSize) throws BusinessException {
 		List<SalesRecordJsonBean> jsnSalesRecords = new ArrayList<SalesRecordJsonBean>();
 		try {
-			Page<SalesRecord> salesRecords = this.salesRecordRepository
-					.findAll(new PageRequest(jtStartIndex, jtPageSize));
+			Page<SalesRecord> salesRecords = this.salesRecordRepository.findAll(new PageRequest(jtStartIndex, jtPageSize));
 			for (SalesRecord salesRecord : salesRecords) {
 				SalesRecordJsonBean jsnSalesRecord = bean2json(salesRecord);
 				jsnSalesRecords.add(jsnSalesRecord);
 			}
 		} catch (Exception e) {
-			LOG.error("Exception thrown while listing salesRecords from - "
-					+ jtStartIndex + " to " + jtPageSize + " - "
+			LOG.error("Exception thrown while listing salesRecords from - " + jtStartIndex + " to " + jtPageSize + " - " + e.getMessage());
+			throw new BusinessException("Exception while listing expenses from - " + jtStartIndex + " to " + jtPageSize + " - "
 					+ e.getMessage());
-			throw new BusinessException(
-					"Exception while listing expenses from - " + jtStartIndex
-							+ " to " + jtPageSize + " - " + e.getMessage());
 		}
 		return jsnSalesRecords;
 	}
@@ -97,30 +91,23 @@ private static DateFormat dateFormat =new SimpleDateFormat("yyyy-MM-dd");
 			SalesRecord salesRecord = json2bean(jsnSalesRecordBean);
 			this.salesRecordRepository.save(salesRecord);
 		} catch (Exception e) {
-			LOG.error("Exception thrown while adding salesRecord"
-					+ jsnSalesRecordBean.toString() + e.getMessage());
-			throw new BusinessException(
-					"Exception thrown while adding salesRecord"
-							+ jsnSalesRecordBean.toString() + e.getMessage());
+			LOG.error("Exception thrown while adding salesRecord" + jsnSalesRecordBean.toString() + e.getMessage());
+			throw new BusinessException("Exception thrown while adding salesRecord" + jsnSalesRecordBean.toString() + e.getMessage());
 		}
 	}
 
-	public void update(SalesRecordJsonBean jsnSalesRecordBean)
-			throws BusinessException {
+	public void update(SalesRecordJsonBean jsnSalesRecordBean) throws BusinessException {
 		try {
 			SalesRecord salesRecord = json2bean(jsnSalesRecordBean);
 			this.salesRecordRepository.save(salesRecord);
 		} catch (Exception e) {
-			LOG.error("Exception thrown while adding salesRecord"
-					+ jsnSalesRecordBean.toString() + e.getMessage());
-			throw new BusinessException(
-					"Exception thrown while adding salesRecord"
-							+ jsnSalesRecordBean.toString() + e.getMessage());
+			LOG.error("Exception thrown while adding salesRecord" + jsnSalesRecordBean.toString() + e.getMessage());
+			throw new BusinessException("Exception thrown while adding salesRecord" + jsnSalesRecordBean.toString() + e.getMessage());
 		}
 	}
 
 	public void delete(Long salesRecordId) {
 		this.salesRecordRepository.delete(salesRecordId);
 	}
-	
+
 }

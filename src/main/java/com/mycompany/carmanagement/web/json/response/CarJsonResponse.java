@@ -9,54 +9,55 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.mycompany.carmanagement.web.json.bean.CarJsonBean;
 
 public class CarJsonResponse {
-    
-    private String Result;
-    
-    private CarJsonBean Records;
-    
-    private String Message;
-    
-    public CarJsonResponse(){}
 
-    public CarJsonResponse(String Result) {
-        this.Result = Result;
-    }
+	private String Result;
 
-    public CarJsonResponse(String Result, CarJsonBean Records) {
-        this.Result = Result;
-        this.Records = Records;
-    }
+	private CarJsonBean Records;
 
-    public CarJsonResponse(String Result, String Message) {
-        this.Result = Result;
-        this.Message = Message;
-    }
+	private String Message;
 
-    @JsonProperty("Result")
-    public String getResult() {
-        return Result;
-    }
+	public CarJsonResponse() {
+	}
 
-    public void setResult(String Result) {
-        this.Result = Result;
-    }
+	public CarJsonResponse(String Result) {
+		this.Result = Result;
+	}
 
-    @JsonProperty("Record")
-    public CarJsonBean getRecords() {
-        return Records;
-    }
+	public CarJsonResponse(String Result, CarJsonBean Records) {
+		this.Result = Result;
+		this.Records = Records;
+	}
 
-    public void setRecords(CarJsonBean Records) {
-        this.Records = Records;
-    }   
+	public CarJsonResponse(String Result, String Message) {
+		this.Result = Result;
+		this.Message = Message;
+	}
 
-    @JsonProperty("Message")
-    public String getMessage() {
-        return Message;
-    }
+	@JsonProperty("Result")
+	public String getResult() {
+		return Result;
+	}
 
-    public void setMessage(String Message) {
-        this.Message = Message;
-    }
+	public void setResult(String Result) {
+		this.Result = Result;
+	}
+
+	@JsonProperty("Record")
+	public CarJsonBean getRecords() {
+		return Records;
+	}
+
+	public void setRecords(CarJsonBean Records) {
+		this.Records = Records;
+	}
+
+	@JsonProperty("Message")
+	public String getMessage() {
+		return Message;
+	}
+
+	public void setMessage(String Message) {
+		this.Message = Message;
+	}
 
 }

@@ -19,9 +19,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	private DataSource dataSource;
 	
     @Override
-    protected void configure(HttpSecurity http) throws Exception {
-        http
-        	//.headers().disable()
+	protected void configure(HttpSecurity http) throws Exception {
+		http
+		// .headers().disable()
         	.csrf().disable()
             .authorizeRequests()
                 .antMatchers("/", "/home").permitAll()

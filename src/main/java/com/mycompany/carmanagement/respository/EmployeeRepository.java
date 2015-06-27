@@ -15,6 +15,6 @@ public interface EmployeeRepository extends PagingAndSortingRepository<Employee,
 
 	@Query("select e from Employee e where e.name like :name and e.description like :description")
 	List<Employee> findWithoutID(@Param("name") String name, @Param("description") String description);
-	
-    Employee findById(long id);
+
+	Employee findById(long id);
 }

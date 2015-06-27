@@ -42,15 +42,14 @@ public class SalesRecordController {
 
 	@RequestMapping(value = "/getAll", method = RequestMethod.POST)
 	@ResponseBody
-	public SalesRecordListJsonResponse getAll(@RequestParam int jtStartIndex,
-			@RequestParam int jtPageSize) {
+	public SalesRecordListJsonResponse getAll(@RequestParam int jtStartIndex, @RequestParam int jtPageSize) {
 		SalesRecordListJsonResponse jstr;
 		List<SalesRecordJsonBean> salesRecordList;
 		try {
 			long salesRecordCount = salesRecordService.getCount();
-			salesRecordList = salesRecordService.getAll(jtStartIndex/jtPageSize, jtPageSize);;
-			jstr = new SalesRecordListJsonResponse("OK", salesRecordList,
-					salesRecordCount);
+			salesRecordList = salesRecordService.getAll(jtStartIndex / jtPageSize, jtPageSize);
+			;
+			jstr = new SalesRecordListJsonResponse("OK", salesRecordList, salesRecordCount);
 		} catch (Exception e) {
 			jstr = new SalesRecordListJsonResponse("ERROR", e.getMessage());
 		}
@@ -60,39 +59,32 @@ public class SalesRecordController {
 
 	@RequestMapping(value = "/add", method = RequestMethod.POST)
 	@ResponseBody
-	public SalesRecordJsonResponse add(
-			@ModelAttribute SalesRecordJsonBean jsnSalesRecordBean,
-			BindingResult result) {
+	public SalesRecordJsonResponse add(@ModelAttribute SalesRecordJsonBean jsnSalesRecordBean, BindingResult result) {
 		SalesRecordJsonResponse jsonJtableResponse;
 		if (result.hasErrors()) {
-			jsonJtableResponse = new SalesRecordJsonResponse("ERROR",
-					"Form invalid");
+			jsonJtableResponse = new SalesRecordJsonResponse("ERROR", "Form invalid");
 		}
 		try {
 			salesRecordService.add(jsnSalesRecordBean);
 			jsonJtableResponse = new SalesRecordJsonResponse("OK", jsnSalesRecordBean);
 		} catch (Exception e) {
-			jsonJtableResponse = new SalesRecordJsonResponse("ERROR",
-					e.getMessage());
+			jsonJtableResponse = new SalesRecordJsonResponse("ERROR", e.getMessage());
 		}
 		return jsonJtableResponse;
 	}
 
 	@RequestMapping(value = "/update", method = RequestMethod.POST)
 	@ResponseBody
-	public SalesRecordJsonResponse update(
-			@ModelAttribute SalesRecordJsonBean salesRecordBean, BindingResult result) {
+	public SalesRecordJsonResponse update(@ModelAttribute SalesRecordJsonBean salesRecordBean, BindingResult result) {
 		SalesRecordJsonResponse jsonJtableResponse;
 		if (result.hasErrors()) {
-			jsonJtableResponse = new SalesRecordJsonResponse("ERROR",
-					"Form invalid");
+			jsonJtableResponse = new SalesRecordJsonResponse("ERROR", "Form invalid");
 		}
 		try {
 			salesRecordService.update(salesRecordBean);
 			jsonJtableResponse = new SalesRecordJsonResponse("OK", salesRecordBean);
 		} catch (Exception e) {
-			jsonJtableResponse = new SalesRecordJsonResponse("ERROR",
-					e.getMessage());
+			jsonJtableResponse = new SalesRecordJsonResponse("ERROR", e.getMessage());
 		}
 		return jsonJtableResponse;
 	}
@@ -105,8 +97,7 @@ public class SalesRecordController {
 			salesRecordService.delete(new Long(id));
 			jsonJtableResponse = new SalesRecordJsonResponse("OK");
 		} catch (Exception e) {
-			jsonJtableResponse = new SalesRecordJsonResponse("ERROR",
-					e.getMessage());
+			jsonJtableResponse = new SalesRecordJsonResponse("ERROR", e.getMessage());
 		}
 		return jsonJtableResponse;
 	}

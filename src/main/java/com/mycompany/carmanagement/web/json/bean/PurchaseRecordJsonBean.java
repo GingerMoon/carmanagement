@@ -7,19 +7,19 @@ package com.mycompany.carmanagement.web.json.bean;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class PurchaseRecordJsonBean {
-    private String id = "-1";
-    private String carId;
-    private String carName;
-    private String employeeId;
-    private String employeeName;
-    private String providerId;
-    private String providerName;
-    private String beginDate;
-    private String endDate;
-    private String description;
-    private String price;
+	private String id = "-1";
+	private String carId;
+	private String carName;
+	private String employeeId;
+	private String employeeName;
+	private String providerId;
+	private String providerName;
+	private String beginDate;
+	private String endDate;
+	private String description;
+	private String price;
 
-    @JsonProperty("id")
+	@JsonProperty("id")
 	public String getId() {
 		return id;
 	}
@@ -108,7 +108,7 @@ public class PurchaseRecordJsonBean {
 	public void setDescription(String description) {
 		this.description = description;
 	}
-	
+
 	@JsonProperty("price")
 	public String getPrice() {
 		return price;

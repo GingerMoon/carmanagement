@@ -9,54 +9,55 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.mycompany.carmanagement.web.json.bean.PurchaseRecordJsonBean;
 
 public class PurchaseRecordJsonResponse {
-    
-    private String Result;
-    
-    private PurchaseRecordJsonBean Records;
-    
-    private String Message;
-    
-    public PurchaseRecordJsonResponse(){}
 
-    public PurchaseRecordJsonResponse(String Result) {
-        this.Result = Result;
-    }
+	private String Result;
 
-    public PurchaseRecordJsonResponse(String Result, PurchaseRecordJsonBean Records) {
-        this.Result = Result;
-        this.Records = Records;
-    }
+	private PurchaseRecordJsonBean Records;
 
-    public PurchaseRecordJsonResponse(String Result, String Message) {
-        this.Result = Result;
-        this.Message = Message;
-    }
+	private String Message;
 
-    @JsonProperty("Result")
-    public String getResult() {
-        return Result;
-    }
+	public PurchaseRecordJsonResponse() {
+	}
 
-    public void setResult(String Result) {
-        this.Result = Result;
-    }
+	public PurchaseRecordJsonResponse(String Result) {
+		this.Result = Result;
+	}
 
-    @JsonProperty("Record")
-    public PurchaseRecordJsonBean getRecords() {
-        return Records;
-    }
+	public PurchaseRecordJsonResponse(String Result, PurchaseRecordJsonBean Records) {
+		this.Result = Result;
+		this.Records = Records;
+	}
 
-    public void setRecords(PurchaseRecordJsonBean Records) {
-        this.Records = Records;
-    }   
+	public PurchaseRecordJsonResponse(String Result, String Message) {
+		this.Result = Result;
+		this.Message = Message;
+	}
 
-    @JsonProperty("Message")
-    public String getMessage() {
-        return Message;
-    }
+	@JsonProperty("Result")
+	public String getResult() {
+		return Result;
+	}
 
-    public void setMessage(String Message) {
-        this.Message = Message;
-    }
+	public void setResult(String Result) {
+		this.Result = Result;
+	}
+
+	@JsonProperty("Record")
+	public PurchaseRecordJsonBean getRecords() {
+		return Records;
+	}
+
+	public void setRecords(PurchaseRecordJsonBean Records) {
+		this.Records = Records;
+	}
+
+	@JsonProperty("Message")
+	public String getMessage() {
+		return Message;
+	}
+
+	public void setMessage(String Message) {
+		this.Message = Message;
+	}
 
 }

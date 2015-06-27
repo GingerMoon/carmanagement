@@ -8,26 +8,28 @@ import javax.persistence.Id;
 @Entity
 public class Provider {
 
-    @Id
-    @GeneratedValue(strategy=GenerationType.AUTO)
-    private long id = -1;
-    private String name = "";
-    private String description = "";
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	private long id = -1;
+	private String name = "";
+	private String description = "";
 
-    public Provider() { }
-    protected Provider(long id) { this.id = id;}
+	public Provider() {
+	}
 
-    public Provider(String firstName, String lastName) {
-        this.name = firstName;
-        this.description = lastName;
-    }
+	protected Provider(long id) {
+		this.id = id;
+	}
 
-    @Override
-    public String toString() {
-        return String.format(
-                "Provider[id=%d, firstName='%s', lastName='%s']",
-                id, name, description);
-    }
+	public Provider(String firstName, String lastName) {
+		this.name = firstName;
+		this.description = lastName;
+	}
+
+	@Override
+	public String toString() {
+		return String.format("Provider[id=%d, firstName='%s', lastName='%s']", id, name, description);
+	}
 
 	public long getId() {
 		return id;
@@ -53,7 +55,6 @@ public class Provider {
 		this.description = description;
 	}
 
-    /***********Getters & Setters********************/
-    
-}
+	/*********** Getters & Setters ********************/
 
+}

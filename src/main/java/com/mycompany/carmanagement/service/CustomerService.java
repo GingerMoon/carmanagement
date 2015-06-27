@@ -19,31 +19,32 @@ import com.mycompany.carmanagement.web.json.bean.CustomerJsonBean;
 
 @Service
 public class CustomerService {
-	
+
 	private static final Logger LOG = LoggerFactory.getLogger(CustomerService.class);
-	
+
 	@Autowired
-    CustomerRepository customerRepository;
-    
+	CustomerRepository customerRepository;
+
 	public long getCount() {
 		return this.customerRepository.count();
 	}
 
 	public List<CustomerJsonBean> getAll(int jtStartIndex, int jtPageSize) throws BusinessException {
 		List<CustomerJsonBean> jsnCustomers = new ArrayList<CustomerJsonBean>();
-		 try {
-			 Page<Customer> customers = this.customerRepository.findAll(new PageRequest(jtStartIndex, jtPageSize));
-	            for (Customer customer : customers) {
-	            	CustomerJsonBean jsnCustomer = new CustomerJsonBean();
-	                jsnCustomer.setId(new Long(customer.getId()).toString());
-	                jsnCustomer.setName(customer.getName());
-	                jsnCustomer.setDescription(customer.getDescription());
-	                jsnCustomers.add(jsnCustomer);
-	            }
-	        } catch (Exception e) {
-	            LOG.error("Exception thrown while listing customers from - "+ jtStartIndex +" to "+ jtPageSize +" - "+ e.getMessage());
-	            throw new BusinessException("Exception while listing expenses from - "+ jtStartIndex +" to "+jtPageSize+" - "+ e.getMessage());
-	        } 
+		try {
+			Page<Customer> customers = this.customerRepository.findAll(new PageRequest(jtStartIndex, jtPageSize));
+			for (Customer customer : customers) {
+				CustomerJsonBean jsnCustomer = new CustomerJsonBean();
+				jsnCustomer.setId(new Long(customer.getId()).toString());
+				jsnCustomer.setName(customer.getName());
+				jsnCustomer.setDescription(customer.getDescription());
+				jsnCustomers.add(jsnCustomer);
+			}
+		} catch (Exception e) {
+			LOG.error("Exception thrown while listing customers from - " + jtStartIndex + " to " + jtPageSize + " - " + e.getMessage());
+			throw new BusinessException("Exception while listing expenses from - " + jtStartIndex + " to " + jtPageSize + " - "
+					+ e.getMessage());
+		}
 		return jsnCustomers;
 	}
 
@@ -54,9 +55,9 @@ public class CustomerService {
 			customer.setDescription(jsnCustomerBean.getDescription());
 			this.customerRepository.save(customer);
 		} catch (Exception e) {
-            LOG.error("Exception thrown while adding customer" + jsnCustomerBean.toString() + e.getMessage());
-            throw new BusinessException("Exception thrown while adding customer" + jsnCustomerBean.toString() + e.getMessage());
-        } 
+			LOG.error("Exception thrown while adding customer" + jsnCustomerBean.toString() + e.getMessage());
+			throw new BusinessException("Exception thrown while adding customer" + jsnCustomerBean.toString() + e.getMessage());
+		}
 	}
 
 	public void update(CustomerJsonBean jsnCustomerBean) throws BusinessException {
@@ -67,11 +68,11 @@ public class CustomerService {
 			customer.setDescription(jsnCustomerBean.getDescription());
 			this.customerRepository.save(customer);
 		} catch (Exception e) {
-            LOG.error("Exception thrown while adding customer" + jsnCustomerBean.toString() + e.getMessage());
-            throw new BusinessException("Exception thrown while adding customer" + jsnCustomerBean.toString() + e.getMessage());
-        } 
+			LOG.error("Exception thrown while adding customer" + jsnCustomerBean.toString() + e.getMessage());
+			throw new BusinessException("Exception thrown while adding customer" + jsnCustomerBean.toString() + e.getMessage());
+		}
 	}
-	
+
 	public void delete(Long customerId) {
 		this.customerRepository.delete(customerId);
 	}

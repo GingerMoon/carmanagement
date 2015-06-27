@@ -30,15 +30,14 @@ public class CustomerController {
 
 	@RequestMapping(value = "/getAll", method = RequestMethod.POST)
 	@ResponseBody
-	public CustomerListJsonResponse getAll(@RequestParam int jtStartIndex,
-			@RequestParam int jtPageSize) {
+	public CustomerListJsonResponse getAll(@RequestParam int jtStartIndex, @RequestParam int jtPageSize) {
 		CustomerListJsonResponse jstr;
 		List<CustomerJsonBean> customerList;
 		try {
 			long customerCount = customerService.getCount();
-			customerList = customerService.getAll(jtStartIndex/jtPageSize, jtPageSize);;
-			jstr = new CustomerListJsonResponse("OK", customerList,
-					customerCount);
+			customerList = customerService.getAll(jtStartIndex / jtPageSize, jtPageSize);
+			;
+			jstr = new CustomerListJsonResponse("OK", customerList, customerCount);
 		} catch (Exception e) {
 			jstr = new CustomerListJsonResponse("ERROR", e.getMessage());
 		}
@@ -48,39 +47,32 @@ public class CustomerController {
 
 	@RequestMapping(value = "/add", method = RequestMethod.POST)
 	@ResponseBody
-	public CustomerJsonResponse add(
-			@ModelAttribute CustomerJsonBean jsnCustomerBean,
-			BindingResult result) {
+	public CustomerJsonResponse add(@ModelAttribute CustomerJsonBean jsnCustomerBean, BindingResult result) {
 		CustomerJsonResponse jsonJtableResponse;
 		if (result.hasErrors()) {
-			jsonJtableResponse = new CustomerJsonResponse("ERROR",
-					"Form invalid");
+			jsonJtableResponse = new CustomerJsonResponse("ERROR", "Form invalid");
 		}
 		try {
 			customerService.add(jsnCustomerBean);
 			jsonJtableResponse = new CustomerJsonResponse("OK", jsnCustomerBean);
 		} catch (Exception e) {
-			jsonJtableResponse = new CustomerJsonResponse("ERROR",
-					e.getMessage());
+			jsonJtableResponse = new CustomerJsonResponse("ERROR", e.getMessage());
 		}
 		return jsonJtableResponse;
 	}
 
 	@RequestMapping(value = "/update", method = RequestMethod.POST)
 	@ResponseBody
-	public CustomerJsonResponse update(
-			@ModelAttribute CustomerJsonBean customerBean, BindingResult result) {
+	public CustomerJsonResponse update(@ModelAttribute CustomerJsonBean customerBean, BindingResult result) {
 		CustomerJsonResponse jsonJtableResponse;
 		if (result.hasErrors()) {
-			jsonJtableResponse = new CustomerJsonResponse("ERROR",
-					"Form invalid");
+			jsonJtableResponse = new CustomerJsonResponse("ERROR", "Form invalid");
 		}
 		try {
 			customerService.update(customerBean);
 			jsonJtableResponse = new CustomerJsonResponse("OK", customerBean);
 		} catch (Exception e) {
-			jsonJtableResponse = new CustomerJsonResponse("ERROR",
-					e.getMessage());
+			jsonJtableResponse = new CustomerJsonResponse("ERROR", e.getMessage());
 		}
 		return jsonJtableResponse;
 	}
@@ -93,8 +85,7 @@ public class CustomerController {
 			customerService.delete(new Long(id));
 			jsonJtableResponse = new CustomerJsonResponse("OK");
 		} catch (Exception e) {
-			jsonJtableResponse = new CustomerJsonResponse("ERROR",
-					e.getMessage());
+			jsonJtableResponse = new CustomerJsonResponse("ERROR", e.getMessage());
 		}
 		return jsonJtableResponse;
 	}

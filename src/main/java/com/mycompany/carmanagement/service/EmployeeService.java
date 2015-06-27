@@ -18,8 +18,7 @@ import com.mycompany.carmanagement.web.json.bean.EmployeeJsonBean;
 @Service
 public class EmployeeService {
 
-	private static final Logger LOG = LoggerFactory
-			.getLogger(EmployeeService.class);
+	private static final Logger LOG = LoggerFactory.getLogger(EmployeeService.class);
 
 	@Autowired
 	EmployeeRepository employeeRepository;
@@ -28,12 +27,10 @@ public class EmployeeService {
 		return this.employeeRepository.count();
 	}
 
-	public List<EmployeeJsonBean> getAll(int jtStartIndex, int jtPageSize)
-			throws BusinessException {
+	public List<EmployeeJsonBean> getAll(int jtStartIndex, int jtPageSize) throws BusinessException {
 		List<EmployeeJsonBean> jsnEmployees = new ArrayList<EmployeeJsonBean>();
 		try {
-			Page<Employee> employees = this.employeeRepository
-					.findAll(new PageRequest(jtStartIndex, jtPageSize));
+			Page<Employee> employees = this.employeeRepository.findAll(new PageRequest(jtStartIndex, jtPageSize));
 			for (Employee employee : employees) {
 				EmployeeJsonBean jsnEmployee = new EmployeeJsonBean();
 				jsnEmployee.setId(new Long(employee.getId()).toString());
@@ -42,12 +39,9 @@ public class EmployeeService {
 				jsnEmployees.add(jsnEmployee);
 			}
 		} catch (Exception e) {
-			LOG.error("Exception thrown while listing employees from - "
-					+ jtStartIndex + " to " + jtPageSize + " - "
+			LOG.error("Exception thrown while listing employees from - " + jtStartIndex + " to " + jtPageSize + " - " + e.getMessage());
+			throw new BusinessException("Exception while listing expenses from - " + jtStartIndex + " to " + jtPageSize + " - "
 					+ e.getMessage());
-			throw new BusinessException(
-					"Exception while listing expenses from - " + jtStartIndex
-							+ " to " + jtPageSize + " - " + e.getMessage());
 		}
 		return jsnEmployees;
 	}
@@ -59,16 +53,12 @@ public class EmployeeService {
 			employee.setDescription(jsnEmployeeBean.getDescription());
 			this.employeeRepository.save(employee);
 		} catch (Exception e) {
-			LOG.error("Exception thrown while adding employee"
-					+ jsnEmployeeBean.toString() + e.getMessage());
-			throw new BusinessException(
-					"Exception thrown while adding employee"
-							+ jsnEmployeeBean.toString() + e.getMessage());
+			LOG.error("Exception thrown while adding employee" + jsnEmployeeBean.toString() + e.getMessage());
+			throw new BusinessException("Exception thrown while adding employee" + jsnEmployeeBean.toString() + e.getMessage());
 		}
 	}
 
-	public void update(EmployeeJsonBean jsnEmployeeBean)
-			throws BusinessException {
+	public void update(EmployeeJsonBean jsnEmployeeBean) throws BusinessException {
 		try {
 			Employee employee = new Employee();
 			employee.setId(new Long(jsnEmployeeBean.getId()));
@@ -76,11 +66,8 @@ public class EmployeeService {
 			employee.setDescription(jsnEmployeeBean.getDescription());
 			this.employeeRepository.save(employee);
 		} catch (Exception e) {
-			LOG.error("Exception thrown while adding employee"
-					+ jsnEmployeeBean.toString() + e.getMessage());
-			throw new BusinessException(
-					"Exception thrown while adding employee"
-							+ jsnEmployeeBean.toString() + e.getMessage());
+			LOG.error("Exception thrown while adding employee" + jsnEmployeeBean.toString() + e.getMessage());
+			throw new BusinessException("Exception thrown while adding employee" + jsnEmployeeBean.toString() + e.getMessage());
 		}
 	}
 

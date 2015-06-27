@@ -1,6 +1,5 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml"
-	xmlns:th="http://www.thymeleaf.org"
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
 	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
 <head>
 <title>请登录</title>
@@ -10,7 +9,7 @@
 	<div th:if="${param.logout}">登录超时</div>
 	<form th:action="@{/login}" method="post">
 		<div>
-			<label> 用户名：  <input type="text" name="username" />
+			<label> 用户名： <input type="text" name="username" />
 			</label>
 		</div>
 		<div>

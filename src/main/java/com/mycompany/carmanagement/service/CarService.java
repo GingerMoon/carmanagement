@@ -18,8 +18,7 @@ import com.mycompany.carmanagement.web.json.bean.CarJsonBean;
 @Service
 public class CarService {
 
-	private static final Logger LOG = LoggerFactory
-			.getLogger(CarService.class);
+	private static final Logger LOG = LoggerFactory.getLogger(CarService.class);
 
 	@Autowired
 	CarRepository carRepository;
@@ -28,12 +27,10 @@ public class CarService {
 		return this.carRepository.count();
 	}
 
-	public List<CarJsonBean> getAll(int jtStartIndex, int jtPageSize)
-			throws BusinessException {
+	public List<CarJsonBean> getAll(int jtStartIndex, int jtPageSize) throws BusinessException {
 		List<CarJsonBean> jsnCars = new ArrayList<CarJsonBean>();
 		try {
-			Page<Car> customers = this.carRepository
-					.findAll(new PageRequest(jtStartIndex, jtPageSize));
+			Page<Car> customers = this.carRepository.findAll(new PageRequest(jtStartIndex, jtPageSize));
 			for (Car customer : customers) {
 				CarJsonBean jsnCar = new CarJsonBean();
 				jsnCar.setId(new Long(customer.getId()).toString());
@@ -42,12 +39,9 @@ public class CarService {
 				jsnCars.add(jsnCar);
 			}
 		} catch (Exception e) {
-			LOG.error("Exception thrown while listing customers from - "
-					+ jtStartIndex + " to " + jtPageSize + " - "
+			LOG.error("Exception thrown while listing customers from - " + jtStartIndex + " to " + jtPageSize + " - " + e.getMessage());
+			throw new BusinessException("Exception while listing expenses from - " + jtStartIndex + " to " + jtPageSize + " - "
 					+ e.getMessage());
-			throw new BusinessException(
-					"Exception while listing expenses from - " + jtStartIndex
-							+ " to " + jtPageSize + " - " + e.getMessage());
 		}
 		return jsnCars;
 	}
@@ -59,16 +53,12 @@ public class CarService {
 			customer.setDescription(jsnCarBean.getDescription());
 			this.carRepository.save(customer);
 		} catch (Exception e) {
-			LOG.error("Exception thrown while adding customer"
-					+ jsnCarBean.toString() + e.getMessage());
-			throw new BusinessException(
-					"Exception thrown while adding customer"
-							+ jsnCarBean.toString() + e.getMessage());
+			LOG.error("Exception thrown while adding customer" + jsnCarBean.toString() + e.getMessage());
+			throw new BusinessException("Exception thrown while adding customer" + jsnCarBean.toString() + e.getMessage());
 		}
 	}
 
-	public void update(CarJsonBean jsnCarBean)
-			throws BusinessException {
+	public void update(CarJsonBean jsnCarBean) throws BusinessException {
 		try {
 			Car customer = new Car();
 			customer.setId(new Long(jsnCarBean.getId()));
@@ -76,11 +66,8 @@ public class CarService {
 			customer.setDescription(jsnCarBean.getDescription());
 			this.carRepository.save(customer);
 		} catch (Exception e) {
-			LOG.error("Exception thrown while adding customer"
-					+ jsnCarBean.toString() + e.getMessage());
-			throw new BusinessException(
-					"Exception thrown while adding customer"
-							+ jsnCarBean.toString() + e.getMessage());
+			LOG.error("Exception thrown while adding customer" + jsnCarBean.toString() + e.getMessage());
+			throw new BusinessException("Exception thrown while adding customer" + jsnCarBean.toString() + e.getMessage());
 		}
 	}
 

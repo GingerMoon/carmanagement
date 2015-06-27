@@ -17,7 +17,6 @@ import com.mycompany.carmanagement.domain.AccountUserDetails;
 import com.mycompany.carmanagement.domain.Role;
 import com.mycompany.carmanagement.domain.Permission;
 
-
 @Service
 public class AccountUserDetailsService implements UserDetailsService {
 
@@ -37,7 +36,7 @@ public class AccountUserDetailsService implements UserDetailsService {
 		}
 
 		List<GrantedAuthority> grantedAuthorities = new ArrayList<GrantedAuthority>();
-		if(!account.getRoles().isEmpty()) {
+		if (!account.getRoles().isEmpty()) {
 			for (Role role : account.getRoles()) {
 				grantedAuthorities.add(new SimpleGrantedAuthority(role.getRole()));
 				for (Permission permission : role.getPermissions()) {
@@ -45,7 +44,7 @@ public class AccountUserDetailsService implements UserDetailsService {
 				}
 			}
 		}
-		
+
 		return new AccountUserDetails(accountService.getAccount(username), grantedAuthorities);
 	}
 }

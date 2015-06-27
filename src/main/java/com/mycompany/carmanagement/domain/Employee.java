@@ -8,26 +8,28 @@ import javax.persistence.Id;
 @Entity
 public class Employee {
 
-    @Id
-    @GeneratedValue(strategy=GenerationType.AUTO)
-    private long id = -1;
-    private String name = "";
-    private String description = "";
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	private long id = -1;
+	private String name = "";
+	private String description = "";
 
-    public Employee() {}
-    protected Employee(long id) {this.id = id;}
+	public Employee() {
+	}
 
-    public Employee(String firstName, String lastName) {
-        this.name = firstName;
-        this.description = lastName;
-    }
+	protected Employee(long id) {
+		this.id = id;
+	}
 
-    @Override
-    public String toString() {
-        return String.format(
-                "Customer[id=%d, firstName='%s', lastName='%s']",
-                id, name, description);
-    }
+	public Employee(String firstName, String lastName) {
+		this.name = firstName;
+		this.description = lastName;
+	}
+
+	@Override
+	public String toString() {
+		return String.format("Customer[id=%d, firstName='%s', lastName='%s']", id, name, description);
+	}
 
 	public long getId() {
 		return id;
@@ -53,7 +55,6 @@ public class Employee {
 		this.description = description;
 	}
 
-    /***********Getters & Setters********************/
-    
-}
+	/*********** Getters & Setters ********************/
 
+}

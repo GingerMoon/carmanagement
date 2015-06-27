@@ -38,18 +38,17 @@ public class PurchaseRecordController {
 
 	@RequestMapping(value = "/getAll", method = RequestMethod.POST)
 	@ResponseBody
-	public PurchaseRecordListJsonResponse getAll(@RequestParam int jtStartIndex,
-			@RequestParam int jtPageSize, @ModelAttribute("purchaseRecord") PurchaseRecord purchaseRecord, BindingResult result) {
+	public PurchaseRecordListJsonResponse getAll(@RequestParam int jtStartIndex, @RequestParam int jtPageSize,
+			@ModelAttribute("purchaseRecord") PurchaseRecord purchaseRecord, BindingResult result) {
 		if (result.hasErrors()) {
-            int i = 1;
-        }
+			int i = 1;
+		}
 		PurchaseRecordListJsonResponse jstr;
 		List<PurchaseRecordJsonBean> purchaseRecordList;
 		try {
 			long purchaseRecordCount = purchaseRecordService.getCount(purchaseRecord);
-			purchaseRecordList = purchaseRecordService.getAll(purchaseRecord, new PageRequest(jtStartIndex/jtPageSize, jtPageSize));
-			jstr = new PurchaseRecordListJsonResponse("OK", purchaseRecordList,
-					purchaseRecordCount);
+			purchaseRecordList = purchaseRecordService.getAll(purchaseRecord, new PageRequest(jtStartIndex / jtPageSize, jtPageSize));
+			jstr = new PurchaseRecordListJsonResponse("OK", purchaseRecordList, purchaseRecordCount);
 		} catch (Exception e) {
 			jstr = new PurchaseRecordListJsonResponse("ERROR", e.getMessage());
 		}
@@ -57,42 +56,34 @@ public class PurchaseRecordController {
 		return jstr;
 	}
 
-	
 	@RequestMapping(value = "/add", method = RequestMethod.POST)
 	@ResponseBody
-	public PurchaseRecordJsonResponse add(
-			@ModelAttribute PurchaseRecordJsonBean jsnPurchaseRecordBean,
-			BindingResult result) {
+	public PurchaseRecordJsonResponse add(@ModelAttribute PurchaseRecordJsonBean jsnPurchaseRecordBean, BindingResult result) {
 		PurchaseRecordJsonResponse jsonJtableResponse;
 		if (result.hasErrors()) {
-			jsonJtableResponse = new PurchaseRecordJsonResponse("ERROR",
-					"Form invalid");
+			jsonJtableResponse = new PurchaseRecordJsonResponse("ERROR", "Form invalid");
 		}
 		try {
 			purchaseRecordService.add(jsnPurchaseRecordBean);
 			jsonJtableResponse = new PurchaseRecordJsonResponse("OK", jsnPurchaseRecordBean);
 		} catch (Exception e) {
-			jsonJtableResponse = new PurchaseRecordJsonResponse("ERROR",
-					e.getMessage());
+			jsonJtableResponse = new PurchaseRecordJsonResponse("ERROR", e.getMessage());
 		}
 		return jsonJtableResponse;
 	}
 
 	@RequestMapping(value = "/update", method = RequestMethod.POST)
 	@ResponseBody
-	public PurchaseRecordJsonResponse update(
-			@ModelAttribute PurchaseRecordJsonBean purchaseRecordBean, BindingResult result) {
+	public PurchaseRecordJsonResponse update(@ModelAttribute PurchaseRecordJsonBean purchaseRecordBean, BindingResult result) {
 		PurchaseRecordJsonResponse jsonJtableResponse;
 		if (result.hasErrors()) {
-			jsonJtableResponse = new PurchaseRecordJsonResponse("ERROR",
-					"Form invalid");
+			jsonJtableResponse = new PurchaseRecordJsonResponse("ERROR", "Form invalid");
 		}
 		try {
 			purchaseRecordService.update(purchaseRecordBean);
 			jsonJtableResponse = new PurchaseRecordJsonResponse("OK", purchaseRecordBean);
 		} catch (Exception e) {
-			jsonJtableResponse = new PurchaseRecordJsonResponse("ERROR",
-					e.getMessage());
+			jsonJtableResponse = new PurchaseRecordJsonResponse("ERROR", e.getMessage());
 		}
 		return jsonJtableResponse;
 	}
@@ -105,8 +96,7 @@ public class PurchaseRecordController {
 			purchaseRecordService.delete(new Long(id));
 			jsonJtableResponse = new PurchaseRecordJsonResponse("OK");
 		} catch (Exception e) {
-			jsonJtableResponse = new PurchaseRecordJsonResponse("ERROR",
-					e.getMessage());
+			jsonJtableResponse = new PurchaseRecordJsonResponse("ERROR", e.getMessage());
 		}
 		return jsonJtableResponse;
 	}

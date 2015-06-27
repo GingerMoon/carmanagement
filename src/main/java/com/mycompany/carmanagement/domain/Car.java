@@ -9,26 +9,28 @@ import javax.persistence.OneToOne;
 @Entity
 public class Car {
 
-    @Id
-    @GeneratedValue(strategy=GenerationType.AUTO)
-    private long id = -1;
-    private String name = "";
-    private String description = "";
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	private long id = -1;
+	private String name = "";
+	private String description = "";
 
-    public Car() {}
-    public Car(long id) {this.id = id;}
+	public Car() {
+	}
 
-    public Car(String name, String description) {
-        this.name = name;
-        this.description = description;
-    }
+	public Car(long id) {
+		this.id = id;
+	}
 
-    @Override
-    public String toString() {
-        return String.format(
-                "Customer[id=%d, name='%s', name='%s']",
-                id, name, description);
-    }
+	public Car(String name, String description) {
+		this.name = name;
+		this.description = description;
+	}
+
+	@Override
+	public String toString() {
+		return String.format("Customer[id=%d, name='%s', name='%s']", id, name, description);
+	}
 
 	public long getId() {
 		return id;
@@ -54,7 +56,6 @@ public class Car {
 		this.description = description;
 	}
 
-    /***********Getters & Setters********************/
-    
-}
+	/*********** Getters & Setters ********************/
 
+}

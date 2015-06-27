@@ -21,9 +21,8 @@ import com.mycompany.carmanagement.web.json.bean.ProviderJsonBean;
 
 @Service
 public class ProviderService {
-	
-	private static final Logger LOG = LoggerFactory
-			.getLogger(ProviderService.class);
+
+	private static final Logger LOG = LoggerFactory.getLogger(ProviderService.class);
 
 	@Autowired
 	ProviderRepository providerRepository;
@@ -32,12 +31,10 @@ public class ProviderService {
 		return this.providerRepository.count();
 	}
 
-	public List<ProviderJsonBean> getAll(int jtStartIndex, int jtPageSize)
-			throws BusinessException {
+	public List<ProviderJsonBean> getAll(int jtStartIndex, int jtPageSize) throws BusinessException {
 		List<ProviderJsonBean> jsnProviders = new ArrayList<ProviderJsonBean>();
 		try {
-			Page<Provider> providers = this.providerRepository
-					.findAll(new PageRequest(jtStartIndex, jtPageSize));
+			Page<Provider> providers = this.providerRepository.findAll(new PageRequest(jtStartIndex, jtPageSize));
 			for (Provider provider : providers) {
 				ProviderJsonBean jsnProvider = new ProviderJsonBean();
 				jsnProvider.setId(new Long(provider.getId()).toString());
@@ -46,12 +43,9 @@ public class ProviderService {
 				jsnProviders.add(jsnProvider);
 			}
 		} catch (Exception e) {
-			LOG.error("Exception thrown while listing providers from - "
-					+ jtStartIndex + " to " + jtPageSize + " - "
+			LOG.error("Exception thrown while listing providers from - " + jtStartIndex + " to " + jtPageSize + " - " + e.getMessage());
+			throw new BusinessException("Exception while listing expenses from - " + jtStartIndex + " to " + jtPageSize + " - "
 					+ e.getMessage());
-			throw new BusinessException(
-					"Exception while listing expenses from - " + jtStartIndex
-							+ " to " + jtPageSize + " - " + e.getMessage());
 		}
 		return jsnProviders;
 	}
@@ -63,16 +57,12 @@ public class ProviderService {
 			provider.setDescription(jsnProviderBean.getDescription());
 			this.providerRepository.save(provider);
 		} catch (Exception e) {
-			LOG.error("Exception thrown while adding provider"
-					+ jsnProviderBean.toString() + e.getMessage());
-			throw new BusinessException(
-					"Exception thrown while adding provider"
-							+ jsnProviderBean.toString() + e.getMessage());
+			LOG.error("Exception thrown while adding provider" + jsnProviderBean.toString() + e.getMessage());
+			throw new BusinessException("Exception thrown while adding provider" + jsnProviderBean.toString() + e.getMessage());
 		}
 	}
 
-	public void update(ProviderJsonBean jsnProviderBean)
-			throws BusinessException {
+	public void update(ProviderJsonBean jsnProviderBean) throws BusinessException {
 		try {
 			Provider provider = new Provider();
 			provider.setId(new Long(jsnProviderBean.getId()));
@@ -80,11 +70,8 @@ public class ProviderService {
 			provider.setDescription(jsnProviderBean.getDescription());
 			this.providerRepository.save(provider);
 		} catch (Exception e) {
-			LOG.error("Exception thrown while adding provider"
-					+ jsnProviderBean.toString() + e.getMessage());
-			throw new BusinessException(
-					"Exception thrown while adding provider"
-							+ jsnProviderBean.toString() + e.getMessage());
+			LOG.error("Exception thrown while adding provider" + jsnProviderBean.toString() + e.getMessage());
+			throw new BusinessException("Exception thrown while adding provider" + jsnProviderBean.toString() + e.getMessage());
 		}
 	}
 

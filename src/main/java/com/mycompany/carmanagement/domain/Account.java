@@ -18,28 +18,19 @@ import javax.validation.Valid;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotEmpty;
 
-/**
- * A account resembles an authenticated user of our system. A account is able to submit orders. A account is identified
- * by his or her username. When authenticating the user supplies its username and password. Besides identification
- * information we also store basic legal information such as address, firstname, lastname and email address.
- * 
- * @author Marten Deinum
- * @author Koen Serneels
- *
- */
 @Entity
 public class Account implements Serializable {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
-    @NotEmpty
-    private String username;
-    @NotEmpty
-    private String password;
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	private Long id;
+	@NotEmpty
+	private String username;
+	@NotEmpty
+	private String password;
 
-    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    private List<Role> roles = new ArrayList<Role>();
+	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	private List<Role> roles = new ArrayList<Role>();
 
 	public Long getId() {
 		return id;
@@ -73,5 +64,4 @@ public class Account implements Serializable {
 		this.roles = roles;
 	}
 
-   
 }

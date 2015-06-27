@@ -37,15 +37,14 @@ public class EmployeeController {
 
 	@RequestMapping(value = "/getAll", method = RequestMethod.POST)
 	@ResponseBody
-	public EmployeeListJsonResponse getAll(@RequestParam int jtStartIndex,
-			@RequestParam int jtPageSize) {
+	public EmployeeListJsonResponse getAll(@RequestParam int jtStartIndex, @RequestParam int jtPageSize) {
 		EmployeeListJsonResponse jstr;
 		List<EmployeeJsonBean> employeeList;
 		try {
 			long employeeCount = employeeService.getCount();
-			employeeList = employeeService.getAll(jtStartIndex/jtPageSize, jtPageSize);;
-			jstr = new EmployeeListJsonResponse("OK", employeeList,
-					employeeCount);
+			employeeList = employeeService.getAll(jtStartIndex / jtPageSize, jtPageSize);
+			;
+			jstr = new EmployeeListJsonResponse("OK", employeeList, employeeCount);
 		} catch (Exception e) {
 			jstr = new EmployeeListJsonResponse("ERROR", e.getMessage());
 		}
@@ -55,39 +54,32 @@ public class EmployeeController {
 
 	@RequestMapping(value = "/add", method = RequestMethod.POST)
 	@ResponseBody
-	public EmployeeJsonResponse add(
-			@ModelAttribute EmployeeJsonBean jsnEmployeeBean,
-			BindingResult result) {
+	public EmployeeJsonResponse add(@ModelAttribute EmployeeJsonBean jsnEmployeeBean, BindingResult result) {
 		EmployeeJsonResponse jsonJtableResponse;
 		if (result.hasErrors()) {
-			jsonJtableResponse = new EmployeeJsonResponse("ERROR",
-					"Form invalid");
+			jsonJtableResponse = new EmployeeJsonResponse("ERROR", "Form invalid");
 		}
 		try {
 			employeeService.add(jsnEmployeeBean);
 			jsonJtableResponse = new EmployeeJsonResponse("OK", jsnEmployeeBean);
 		} catch (Exception e) {
-			jsonJtableResponse = new EmployeeJsonResponse("ERROR",
-					e.getMessage());
+			jsonJtableResponse = new EmployeeJsonResponse("ERROR", e.getMessage());
 		}
 		return jsonJtableResponse;
 	}
 
 	@RequestMapping(value = "/update", method = RequestMethod.POST)
 	@ResponseBody
-	public EmployeeJsonResponse update(
-			@ModelAttribute EmployeeJsonBean employeeBean, BindingResult result) {
+	public EmployeeJsonResponse update(@ModelAttribute EmployeeJsonBean employeeBean, BindingResult result) {
 		EmployeeJsonResponse jsonJtableResponse;
 		if (result.hasErrors()) {
-			jsonJtableResponse = new EmployeeJsonResponse("ERROR",
-					"Form invalid");
+			jsonJtableResponse = new EmployeeJsonResponse("ERROR", "Form invalid");
 		}
 		try {
 			employeeService.update(employeeBean);
 			jsonJtableResponse = new EmployeeJsonResponse("OK", employeeBean);
 		} catch (Exception e) {
-			jsonJtableResponse = new EmployeeJsonResponse("ERROR",
-					e.getMessage());
+			jsonJtableResponse = new EmployeeJsonResponse("ERROR", e.getMessage());
 		}
 		return jsonJtableResponse;
 	}
@@ -100,8 +92,7 @@ public class EmployeeController {
 			employeeService.delete(new Long(id));
 			jsonJtableResponse = new EmployeeJsonResponse("OK");
 		} catch (Exception e) {
-			jsonJtableResponse = new EmployeeJsonResponse("ERROR",
-					e.getMessage());
+			jsonJtableResponse = new EmployeeJsonResponse("ERROR", e.getMessage());
 		}
 		return jsonJtableResponse;
 	}

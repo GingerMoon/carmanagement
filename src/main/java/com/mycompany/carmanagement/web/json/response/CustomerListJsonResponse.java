@@ -10,59 +10,59 @@ import com.mycompany.carmanagement.web.json.bean.CustomerJsonBean;
 import java.util.List;
 
 public class CustomerListJsonResponse {
-    
-    private String Result;
-    
-    private List<CustomerJsonBean> Records;
-    
-    private long TotalRecordCount;
-    
-    private String Message;
 
-    public CustomerListJsonResponse(String Result, List<CustomerJsonBean> Records, long TotalRecordCount) {
-        this.Result = Result;
-        this.Records = Records;
-        this.TotalRecordCount = TotalRecordCount;
-    }
+	private String Result;
 
-    public CustomerListJsonResponse(String Result, String Message) {
-        this.Result = Result;
-        this.Message = Message;
-    } 
+	private List<CustomerJsonBean> Records;
 
-    @JsonProperty("Result")
-    public String getResult() {
-        return Result;
-    }
+	private long TotalRecordCount;
 
-    public void setResult(String Result) {
-        this.Result = Result;
-    }
+	private String Message;
 
-    @JsonProperty("Records")
-    public List<CustomerJsonBean> getRecords() {
-        return Records;
-    }
+	public CustomerListJsonResponse(String Result, List<CustomerJsonBean> Records, long TotalRecordCount) {
+		this.Result = Result;
+		this.Records = Records;
+		this.TotalRecordCount = TotalRecordCount;
+	}
 
-    public void setRecords(List<CustomerJsonBean> Records) {
-        this.Records = Records;
-    }
+	public CustomerListJsonResponse(String Result, String Message) {
+		this.Result = Result;
+		this.Message = Message;
+	}
 
-    @JsonProperty("TotalRecordCount")
-    public long getTotalRecordCount() {
-        return TotalRecordCount;
-    }
+	@JsonProperty("Result")
+	public String getResult() {
+		return Result;
+	}
 
-    public void setTotalRecordCount(int TotalRecordCount) {
-        this.TotalRecordCount = TotalRecordCount;
-    } 
+	public void setResult(String Result) {
+		this.Result = Result;
+	}
 
-    @JsonProperty("Message")
-    public String getMessage() {
-        return Message;
-    }
+	@JsonProperty("Records")
+	public List<CustomerJsonBean> getRecords() {
+		return Records;
+	}
 
-    public void setMessage(String Message) {
-        this.Message = Message;
-    }  
+	public void setRecords(List<CustomerJsonBean> Records) {
+		this.Records = Records;
+	}
+
+	@JsonProperty("TotalRecordCount")
+	public long getTotalRecordCount() {
+		return TotalRecordCount;
+	}
+
+	public void setTotalRecordCount(int TotalRecordCount) {
+		this.TotalRecordCount = TotalRecordCount;
+	}
+
+	@JsonProperty("Message")
+	public String getMessage() {
+		return Message;
+	}
+
+	public void setMessage(String Message) {
+		this.Message = Message;
+	}
 }

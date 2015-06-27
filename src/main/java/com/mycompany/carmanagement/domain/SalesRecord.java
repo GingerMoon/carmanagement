@@ -16,27 +16,26 @@ import javax.persistence.OneToOne;
 @Entity
 public class SalesRecord {
 
-    private long id = -1;
-    private Car car;
-    private Customer customer;
-    private Employee employee;
-    private long price = -1;
-    private Date beginDate;
-    private Date endDate;
-    private String description = "";
+	private long id = -1;
+	private Car car;
+	private Customer customer;
+	private Employee employee;
+	private long price = -1;
+	private Date beginDate;
+	private Date endDate;
+	private String description = "";
 
-    public SalesRecord() {
-    	this.car = new Car();
-    	this.customer = new Customer();
-    	this.employee = new Employee();
-    	this.beginDate = new Date();
-    	this.endDate = new Date();
-    	this.description = new String();
-    	
-    }
-	
-	
-    @Id
+	public SalesRecord() {
+		this.car = new Car();
+		this.customer = new Customer();
+		this.employee = new Employee();
+		this.beginDate = new Date();
+		this.endDate = new Date();
+		this.description = new String();
+
+	}
+
+	@Id
 	@GeneratedValue(strategy = IDENTITY)
 	@Column(name = "id")
 	public long getId() {
@@ -113,8 +112,7 @@ public class SalesRecord {
 		this.description = description;
 	}
 
-	public SalesRecord(long id, Car car, Customer customer, Employee employee,
-			long price, Date beginDate, Date endDate, String description) {
+	public SalesRecord(long id, Car car, Customer customer, Employee employee, long price, Date beginDate, Date endDate, String description) {
 		super();
 		this.id = id;
 		this.car = car;
@@ -126,7 +124,4 @@ public class SalesRecord {
 		this.description = description;
 	}
 
-	
-    
 }
-
