@@ -38,9 +38,9 @@ public class SalesRecordController {
 		SalesRecordListJsonResponse jstr;
 		List<SalesRecordJsonBean> salesRecordList;
 		try {
-			long salesRecordCount = salesRecordService.getCount(salesRecord);
-			salesRecordList = salesRecordService.getAll(salesRecord, new PageRequest(jtStartIndex / jtPageSize, jtPageSize));
-			jstr = new SalesRecordListJsonResponse("OK", salesRecordList, salesRecordCount);
+			long[] salesRecordCount = {0}; 
+			salesRecordList = salesRecordService.getAll(salesRecord, new PageRequest(jtStartIndex / jtPageSize, jtPageSize), salesRecordCount);
+			jstr = new SalesRecordListJsonResponse("OK", salesRecordList, salesRecordCount[0]);
 		} catch (Exception e) {
 			jstr = new SalesRecordListJsonResponse("ERROR", e.getMessage());
 		}

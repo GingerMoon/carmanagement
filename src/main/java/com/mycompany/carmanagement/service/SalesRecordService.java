@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+
 import com.mycompany.carmanagement.domain.SalesRecord;
 import com.mycompany.carmanagement.exception.BusinessException;
 import com.mycompany.carmanagement.respository.SalesRecordRepository;
@@ -62,7 +63,7 @@ public class SalesRecordService {
 		return this.salesRecordRepository.count();
 	}
 
-	public List<SalesRecordJsonBean> getAll(SalesRecord salesRecord, Pageable pageable) throws BusinessException {
+	public List<SalesRecordJsonBean> getAll(SalesRecord salesRecord, Pageable pageable, long[] salesRecordCount ) throws BusinessException {
 		List<SalesRecordJsonBean> jsnSalesRecords = new ArrayList<SalesRecordJsonBean>();
 		try {
 			long id = salesRecord.getId();
@@ -72,40 +73,58 @@ public class SalesRecordService {
 			if (id == -1) {
 				if ((salesRecord.getCar().getId() != -1) && (salesRecord.getCustomer().getId() != -1) // 1,1,1
 						&& (salesRecord.getEmployee().getId() != -1)) {
-					salesRecords = this.salesRecordRepository.findByCarIdCustomerIdEmployeeId(salesRecord.getCar().getId(),
-							salesRecord.getCustomer().getId(), salesRecord.getEmployee().getId(), salesRecord.getBeginDate(),
+					salesRecords = this.salesRecordRepository.findByCarIdCustomerIdEmployeeId(salesRecord.getCar().getId(), salesRecord
+							.getCustomer().getId(), salesRecord.getEmployee().getId(), salesRecord.getBeginDate(),
 							salesRecord.getEndDate(), pageable);
+					salesRecordCount[0] = this.salesRecordRepository.countByCarIdCustomerIdEmployeeId(salesRecord.getCar().getId(),
+							salesRecord.getCustomer().getId(), salesRecord.getEmployee().getId(), salesRecord.getBeginDate(),
+							salesRecord.getEndDate());
 				} else if ((salesRecord.getCar().getId() == -1) && (salesRecord.getCustomer().getId() == -1) // -1,-1,-1
 						&& (salesRecord.getEmployee().getId() == -1)) {
-					salesRecords = this.salesRecordRepository.findByTime(salesRecord.getBeginDate(), salesRecord.getEndDate(),
-							pageable);
+					salesRecords = this.salesRecordRepository.findByTime(salesRecord.getBeginDate(), salesRecord.getEndDate(), pageable);
+					salesRecordCount[0] = this.salesRecordRepository.countByTime(salesRecord.getBeginDate(), salesRecord.getEndDate());
 				} else if ((salesRecord.getCar().getId() != -1) && (salesRecord.getCustomer().getId() != -1) // 1,1,-1
 						&& (salesRecord.getEmployee().getId() == -1)) {
-					salesRecords = this.salesRecordRepository.findByCarIdCustomerId(salesRecord.getCar().getId(), salesRecord
-							.getCustomer().getId(), salesRecord.getBeginDate(), salesRecord.getEndDate(), pageable);
+					salesRecords = this.salesRecordRepository.findByCarIdCustomerId(salesRecord.getCar().getId(), salesRecord.getCustomer()
+							.getId(), salesRecord.getBeginDate(), salesRecord.getEndDate(), pageable);
+					salesRecordCount[0] = this.salesRecordRepository.countByCarIdCustomerId(salesRecord.getCar().getId(), salesRecord
+							.getCustomer().getId(), salesRecord.getBeginDate(), salesRecord.getEndDate());
 				} else if ((salesRecord.getCar().getId() != -1) && (salesRecord.getCustomer().getId() == -1) // 1,-1,1
 						&& (salesRecord.getEmployee().getId() != -1)) {
-					salesRecords = this.salesRecordRepository.findByCarIdEmployeeId(salesRecord.getCar().getId(), salesRecord
-							.getEmployee().getId(), salesRecord.getBeginDate(), salesRecord.getEndDate(), pageable);
+					salesRecords = this.salesRecordRepository.findByCarIdEmployeeId(salesRecord.getCar().getId(), salesRecord.getEmployee()
+							.getId(), salesRecord.getBeginDate(), salesRecord.getEndDate(), pageable);
+					salesRecordCount[0] = this.salesRecordRepository.countByCarIdEmployeeId(salesRecord.getCar().getId(), salesRecord
+							.getEmployee().getId(), salesRecord.getBeginDate(), salesRecord.getEndDate());
 				} else if ((salesRecord.getCar().getId() == -1) && (salesRecord.getCustomer().getId() != -1) // -1,1,1
 						&& (salesRecord.getEmployee().getId() != -1)) {
-					salesRecords = this.salesRecordRepository.findByCustomerIdEmployeeId(salesRecord.getCustomer().getId(),
-							salesRecord.getEmployee().getId(), salesRecord.getBeginDate(), salesRecord.getEndDate(), pageable);
+					salesRecords = this.salesRecordRepository.findByCustomerIdEmployeeId(salesRecord.getCustomer().getId(), salesRecord
+							.getEmployee().getId(), salesRecord.getBeginDate(), salesRecord.getEndDate(), pageable);
+					salesRecordCount[0] = this.salesRecordRepository.countByCustomerIdEmployeeId(salesRecord.getCustomer().getId(),
+							salesRecord.getEmployee().getId(), salesRecord.getBeginDate(), salesRecord.getEndDate());
 				} else if ((salesRecord.getCar().getId() != -1) && (salesRecord.getCustomer().getId() == -1) // 1,-1,-1
 						&& (salesRecord.getEmployee().getId() == -1)) {
-					salesRecords = this.salesRecordRepository.findByCarId(salesRecord.getCar().getId(),
-							salesRecord.getBeginDate(), salesRecord.getEndDate(), pageable);
+					salesRecords = this.salesRecordRepository.findByCarId(salesRecord.getCar().getId(), salesRecord.getBeginDate(),
+							salesRecord.getEndDate(), pageable);
+					salesRecordCount[0] = this.salesRecordRepository.countByCarId(salesRecord.getCar().getId(), salesRecord.getBeginDate(),
+							salesRecord.getEndDate());
 				} else if ((salesRecord.getCar().getId() == -1) && (salesRecord.getCustomer().getId() != -1) // -1,1,-1
 						&& (salesRecord.getEmployee().getId() == -1)) {
 					salesRecords = this.salesRecordRepository.findByCustomerId(salesRecord.getCustomer().getId(),
 							salesRecord.getBeginDate(), salesRecord.getEndDate(), pageable);
+					salesRecordCount[0] = this.salesRecordRepository.countByCustomerId(salesRecord.getCustomer().getId(),
+							salesRecord.getBeginDate(), salesRecord.getEndDate());
 				} else if ((salesRecord.getCar().getId() == -1) && (salesRecord.getCustomer().getId() == -1) // -1,-1,1
 						&& (salesRecord.getEmployee().getId() != -1)) {
 					salesRecords = this.salesRecordRepository.findByEmployeeId(salesRecord.getEmployee().getId(),
 							salesRecord.getBeginDate(), salesRecord.getEndDate(), pageable);
+					salesRecordCount[0] = this.salesRecordRepository.countByEmployeeId(salesRecord.getEmployee().getId(),
+							salesRecord.getBeginDate(), salesRecord.getEndDate());
 				}
 			} else {
 				SalesRecord e = this.salesRecordRepository.findById(id);
+				if(e != null) {
+					salesRecordCount[0] = 1;
+				}
 				salesRecords = new ArrayList<SalesRecord>();
 				salesRecords.add(e);
 			}

@@ -16,34 +16,73 @@ public interface SalesRecordRepository extends PagingAndSortingRepository<SalesR
 
 	SalesRecord findById(long id);
 
+	/*******************************************************************************************************************************/
 	@Query("select s from SalesRecord s where s.car.id = :car_id and s.beginDate >= :beginDate and s.endDate <= :endDate")
 	List<SalesRecord> findByCarId(@Param("car_id") long car_id, @Param("beginDate") Date beginDate, @Param("endDate") Date endDate,
 			Pageable pageable);
 
+	@Query("select count(*) from SalesRecord s where s.car.id = :car_id and s.beginDate >= :beginDate and s.endDate <= :endDate")
+	Long countByCarId(@Param("car_id") long car_id, @Param("beginDate") Date beginDate, @Param("endDate") Date endDate);
+
+	/*******************************************************************************************************************************/
 	@Query("select s from SalesRecord s where s.customer.id = :customer_id and s.beginDate >= :beginDate and s.endDate <= :endDate")
 	List<SalesRecord> findByCustomerId(@Param("customer_id") long customer_id, @Param("beginDate") Date beginDate,
 			@Param("endDate") Date endDate, Pageable pageable);
 
+	@Query("select count(*) from SalesRecord s where s.customer.id = :customer_id and s.beginDate >= :beginDate and s.endDate <= :endDate")
+	Long countByCustomerId(@Param("customer_id") long customer_id, @Param("beginDate") Date beginDate,
+			@Param("endDate") Date endDate);
+
+	/*******************************************************************************************************************************/
 	@Query("select s from SalesRecord s where s.employee.id = :employee_id and s.beginDate >= :beginDate and s.endDate <= :endDate")
 	List<SalesRecord> findByEmployeeId(@Param("employee_id") long employee_id, @Param("beginDate") Date beginDate,
 			@Param("endDate") Date endDate, Pageable pageable);
 
+	@Query("select count(*) from SalesRecord s where s.employee.id = :employee_id and s.beginDate >= :beginDate and s.endDate <= :endDate")
+	Long countByEmployeeId(@Param("employee_id") long employee_id, @Param("beginDate") Date beginDate,
+			@Param("endDate") Date endDate);
+
+	/*******************************************************************************************************************************/
 	@Query("select s from SalesRecord s where s.car.id = :car_id and s.customer.id = :customer_id and s.beginDate >= :beginDate and s.endDate <= :endDate")
 	List<SalesRecord> findByCarIdCustomerId(@Param("car_id") long car_id, @Param("customer_id") long customer_id,
 			@Param("beginDate") Date beginDate, @Param("endDate") Date endDate, Pageable pageable);
+	
+	@Query("select count(*) from SalesRecord s where s.car.id = :car_id and s.customer.id = :customer_id and s.beginDate >= :beginDate and s.endDate <= :endDate")
+	Long countByCarIdCustomerId(@Param("car_id") long car_id, @Param("customer_id") long customer_id,
+			@Param("beginDate") Date beginDate, @Param("endDate") Date endDate);
 
+	/*******************************************************************************************************************************/
 	@Query("select s from SalesRecord s where s.customer.id = :customer_id and s.employee.id = :employee_id and s.beginDate >= :beginDate and s.endDate <= :endDate")
 	List<SalesRecord> findByCustomerIdEmployeeId(@Param("customer_id") long customer_id, @Param("employee_id") long employee_id,
 			@Param("beginDate") Date beginDate, @Param("endDate") Date endDate, Pageable pageable);
+	
+	@Query("select count(*) from SalesRecord s where s.customer.id = :customer_id and s.employee.id = :employee_id and s.beginDate >= :beginDate and s.endDate <= :endDate")
+	Long countByCustomerIdEmployeeId(@Param("customer_id") long customer_id, @Param("employee_id") long employee_id,
+			@Param("beginDate") Date beginDate, @Param("endDate") Date endDate);
 
+	/*******************************************************************************************************************************/
 	@Query("select s from SalesRecord s where s.car.id = :car_id and s.employee.id = :employee_id and s.beginDate >= :beginDate and s.endDate <= :endDate")
 	List<SalesRecord> findByCarIdEmployeeId(@Param("car_id") long car_id, @Param("employee_id") long employee_id,
 			@Param("beginDate") Date beginDate, @Param("endDate") Date endDate, Pageable pageable);
+	
+	@Query("select count(*) from SalesRecord s where s.car.id = :car_id and s.employee.id = :employee_id and s.beginDate >= :beginDate and s.endDate <= :endDate")
+	Long countByCarIdEmployeeId(@Param("car_id") long car_id, @Param("employee_id") long employee_id,
+			@Param("beginDate") Date beginDate, @Param("endDate") Date endDate);
 
+	/*******************************************************************************************************************************/
 	@Query("select s from SalesRecord s where s.car.id = :car_id and s.customer.id = :customer_id and s.employee.id = :employee_id and s.beginDate >= :beginDate and s.endDate <= :endDate")
 	List<SalesRecord> findByCarIdCustomerIdEmployeeId(@Param("car_id") long car_id, @Param("customer_id") long customer_id,
 			@Param("employee_id") long employee_id, @Param("beginDate") Date beginDate, @Param("endDate") Date endDate, Pageable pageable);
+	
+	@Query("select count(*) from SalesRecord s where s.car.id = :car_id and s.customer.id = :customer_id and s.employee.id = :employee_id and s.beginDate >= :beginDate and s.endDate <= :endDate")
+	Long countByCarIdCustomerIdEmployeeId(@Param("car_id") long car_id, @Param("customer_id") long customer_id,
+			@Param("employee_id") long employee_id, @Param("beginDate") Date beginDate, @Param("endDate") Date endDate);
 
+	/*******************************************************************************************************************************/
 	@Query("select s from SalesRecord s where s.beginDate >= :beginDate and s.endDate <= :endDate")
 	List<SalesRecord> findByTime(@Param("beginDate") Date beginDate, @Param("endDate") Date endDate, Pageable pageable);
+	
+	@Query("select count(*) from SalesRecord s where s.beginDate >= :beginDate and s.endDate <= :endDate")
+	Long countByTime(@Param("beginDate") Date beginDate, @Param("endDate") Date endDate);
+	/*******************************************************************************************************************************/
 }
