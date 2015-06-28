@@ -38,9 +38,13 @@ public class SalesRecordController {
 		SalesRecordListJsonResponse jstr;
 		List<SalesRecordJsonBean> salesRecordList;
 		try {
-			long[] salesRecordCount = {0}; 
-			salesRecordList = salesRecordService.getAll(salesRecord, new PageRequest(jtStartIndex / jtPageSize, jtPageSize), salesRecordCount);
-			jstr = new SalesRecordListJsonResponse("OK", salesRecordList, salesRecordCount[0]);
+			long[] salesRecordCountTotalPrice = {0, -1}; 
+			salesRecordList = salesRecordService.getAll(salesRecord, new PageRequest(jtStartIndex / jtPageSize, jtPageSize), salesRecordCountTotalPrice);
+			SalesRecordJsonBean totalPriceElement = new SalesRecordJsonBean();
+			totalPriceElement.setId("");
+			totalPriceElement.setPrice(String.valueOf(salesRecordCountTotalPrice[1]));
+			salesRecordList.add(totalPriceElement);
+			jstr = new SalesRecordListJsonResponse("OK", salesRecordList, salesRecordCountTotalPrice[0]);
 		} catch (Exception e) {
 			jstr = new SalesRecordListJsonResponse("ERROR", e.getMessage());
 		}
