@@ -1,12 +1,9 @@
 package com.mycompany.carmanagement.controller;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.format.datetime.DateFormatter;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
@@ -15,10 +12,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.context.request.WebRequest;
-import org.springframework.web.servlet.ModelAndView;
+
 import com.mycompany.carmanagement.domain.PurchaseRecord;
-import com.mycompany.carmanagement.service.PurchaseRecordService;
 import com.mycompany.carmanagement.service.PurchaseRecordService;
 import com.mycompany.carmanagement.web.json.bean.PurchaseRecordJsonBean;
 import com.mycompany.carmanagement.web.json.response.PurchaseRecordJsonResponse;
@@ -40,15 +35,16 @@ public class PurchaseRecordController {
 	@ResponseBody
 	public PurchaseRecordListJsonResponse getAll(@RequestParam int jtStartIndex, @RequestParam int jtPageSize,
 			@ModelAttribute("purchaseRecord") PurchaseRecord purchaseRecord, BindingResult result) {
-		if (result.hasErrors()) {
-			int i = 1;
-		}
 		PurchaseRecordListJsonResponse jstr;
 		List<PurchaseRecordJsonBean> purchaseRecordList;
 		try {
-			long purchaseRecordCount = purchaseRecordService.getCount(purchaseRecord);
-			purchaseRecordList = purchaseRecordService.getAll(purchaseRecord, new PageRequest(jtStartIndex / jtPageSize, jtPageSize));
-			jstr = new PurchaseRecordListJsonResponse("OK", purchaseRecordList, purchaseRecordCount);
+			long[] purchaseRecordCountTotalPrice = {0, -1}; 
+			purchaseRecordList = purchaseRecordService.getAll(purchaseRecord, new PageRequest(jtStartIndex / jtPageSize, jtPageSize), purchaseRecordCountTotalPrice);
+			PurchaseRecordJsonBean totalPriceElement = new PurchaseRecordJsonBean();
+			totalPriceElement.setId("");
+			totalPriceElement.setPrice(String.valueOf(purchaseRecordCountTotalPrice[1]));
+			purchaseRecordList.add(totalPriceElement);
+			jstr = new PurchaseRecordListJsonResponse("OK", purchaseRecordList, purchaseRecordCountTotalPrice[0]);
 		} catch (Exception e) {
 			jstr = new PurchaseRecordListJsonResponse("ERROR", e.getMessage());
 		}

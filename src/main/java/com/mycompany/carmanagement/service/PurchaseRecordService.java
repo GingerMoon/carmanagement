@@ -66,7 +66,7 @@ public class PurchaseRecordService {
 		return this.purchaseRecordRepository.count();
 	}
 
-	public List<PurchaseRecordJsonBean> getAll(PurchaseRecord purchaseRecord, Pageable pageable) throws BusinessException {
+	public List<PurchaseRecordJsonBean> getAll(PurchaseRecord purchaseRecord, Pageable pageable, long[] purchaseRecordCount ) throws BusinessException {
 		List<PurchaseRecordJsonBean> jsnPurchaseRecords = new ArrayList<PurchaseRecordJsonBean>();
 		try {
 			long id = purchaseRecord.getId();
@@ -76,40 +76,75 @@ public class PurchaseRecordService {
 			if (id == -1) {
 				if ((purchaseRecord.getCar().getId() != -1) && (purchaseRecord.getProvider().getId() != -1) // 1,1,1
 						&& (purchaseRecord.getEmployee().getId() != -1)) {
-					purchaseRecords = this.purchaseRecordRepository.findByCarIdProviderIdEmployeeId(purchaseRecord.getCar().getId(),
-							purchaseRecord.getProvider().getId(), purchaseRecord.getEmployee().getId(), purchaseRecord.getBeginDate(),
+					purchaseRecords = this.purchaseRecordRepository.findByCarIdProviderIdEmployeeId(purchaseRecord.getCar().getId(), purchaseRecord
+							.getProvider().getId(), purchaseRecord.getEmployee().getId(), purchaseRecord.getBeginDate(),
 							purchaseRecord.getEndDate(), pageable);
+					purchaseRecordCount[0] = this.purchaseRecordRepository.countByCarIdProviderIdEmployeeId(purchaseRecord.getCar().getId(),
+							purchaseRecord.getProvider().getId(), purchaseRecord.getEmployee().getId(), purchaseRecord.getBeginDate(),
+							purchaseRecord.getEndDate());
+					purchaseRecordCount[1] = this.purchaseRecordRepository.totalPriceByCarIdProviderIdEmployeeId(purchaseRecord.getCar().getId(),
+							purchaseRecord.getProvider().getId(), purchaseRecord.getEmployee().getId(), purchaseRecord.getBeginDate(),
+							purchaseRecord.getEndDate());
 				} else if ((purchaseRecord.getCar().getId() == -1) && (purchaseRecord.getProvider().getId() == -1) // -1,-1,-1
 						&& (purchaseRecord.getEmployee().getId() == -1)) {
-					purchaseRecords = this.purchaseRecordRepository.findByTime(purchaseRecord.getBeginDate(), purchaseRecord.getEndDate(),
-							pageable);
+					purchaseRecords = this.purchaseRecordRepository.findByTime(purchaseRecord.getBeginDate(), purchaseRecord.getEndDate(), pageable);
+					purchaseRecordCount[0] = this.purchaseRecordRepository.countByTime(purchaseRecord.getBeginDate(), purchaseRecord.getEndDate());
+					purchaseRecordCount[1] = this.purchaseRecordRepository.totalPriceByTime(purchaseRecord.getBeginDate(), purchaseRecord.getEndDate());
 				} else if ((purchaseRecord.getCar().getId() != -1) && (purchaseRecord.getProvider().getId() != -1) // 1,1,-1
 						&& (purchaseRecord.getEmployee().getId() == -1)) {
-					purchaseRecords = this.purchaseRecordRepository.findByCarIdProviderId(purchaseRecord.getCar().getId(), purchaseRecord
-							.getProvider().getId(), purchaseRecord.getBeginDate(), purchaseRecord.getEndDate(), pageable);
+					purchaseRecords = this.purchaseRecordRepository.findByCarIdProviderId(purchaseRecord.getCar().getId(), purchaseRecord.getProvider()
+							.getId(), purchaseRecord.getBeginDate(), purchaseRecord.getEndDate(), pageable);
+					purchaseRecordCount[0] = this.purchaseRecordRepository.countByCarIdProviderId(purchaseRecord.getCar().getId(), purchaseRecord
+							.getProvider().getId(), purchaseRecord.getBeginDate(), purchaseRecord.getEndDate());
+					purchaseRecordCount[1] = this.purchaseRecordRepository.totalPriceByCarIdProviderId(purchaseRecord.getCar().getId(), purchaseRecord
+							.getProvider().getId(), purchaseRecord.getBeginDate(), purchaseRecord.getEndDate());
 				} else if ((purchaseRecord.getCar().getId() != -1) && (purchaseRecord.getProvider().getId() == -1) // 1,-1,1
 						&& (purchaseRecord.getEmployee().getId() != -1)) {
-					purchaseRecords = this.purchaseRecordRepository.findByCarIdEmployeeId(purchaseRecord.getCar().getId(), purchaseRecord
-							.getEmployee().getId(), purchaseRecord.getBeginDate(), purchaseRecord.getEndDate(), pageable);
+					purchaseRecords = this.purchaseRecordRepository.findByCarIdEmployeeId(purchaseRecord.getCar().getId(), purchaseRecord.getEmployee()
+							.getId(), purchaseRecord.getBeginDate(), purchaseRecord.getEndDate(), pageable);
+					purchaseRecordCount[0] = this.purchaseRecordRepository.countByCarIdEmployeeId(purchaseRecord.getCar().getId(), purchaseRecord
+							.getEmployee().getId(), purchaseRecord.getBeginDate(), purchaseRecord.getEndDate());
+					purchaseRecordCount[1] = this.purchaseRecordRepository.totalPriceByCarIdEmployeeId(purchaseRecord.getCar().getId(), purchaseRecord
+							.getEmployee().getId(), purchaseRecord.getBeginDate(), purchaseRecord.getEndDate());
 				} else if ((purchaseRecord.getCar().getId() == -1) && (purchaseRecord.getProvider().getId() != -1) // -1,1,1
 						&& (purchaseRecord.getEmployee().getId() != -1)) {
-					purchaseRecords = this.purchaseRecordRepository.findByProviderIdEmployeeId(purchaseRecord.getProvider().getId(),
-							purchaseRecord.getEmployee().getId(), purchaseRecord.getBeginDate(), purchaseRecord.getEndDate(), pageable);
+					purchaseRecords = this.purchaseRecordRepository.findByProviderIdEmployeeId(purchaseRecord.getProvider().getId(), purchaseRecord
+							.getEmployee().getId(), purchaseRecord.getBeginDate(), purchaseRecord.getEndDate(), pageable);
+					purchaseRecordCount[0] = this.purchaseRecordRepository.countByProviderIdEmployeeId(purchaseRecord.getProvider().getId(),
+							purchaseRecord.getEmployee().getId(), purchaseRecord.getBeginDate(), purchaseRecord.getEndDate());
+					purchaseRecordCount[1] = this.purchaseRecordRepository.totalPriceByProviderIdEmployeeId(purchaseRecord.getProvider().getId(),
+							purchaseRecord.getEmployee().getId(), purchaseRecord.getBeginDate(), purchaseRecord.getEndDate());
 				} else if ((purchaseRecord.getCar().getId() != -1) && (purchaseRecord.getProvider().getId() == -1) // 1,-1,-1
 						&& (purchaseRecord.getEmployee().getId() == -1)) {
-					purchaseRecords = this.purchaseRecordRepository.findByCarId(purchaseRecord.getCar().getId(),
-							purchaseRecord.getBeginDate(), purchaseRecord.getEndDate(), pageable);
+					purchaseRecords = this.purchaseRecordRepository.findByCarId(purchaseRecord.getCar().getId(), purchaseRecord.getBeginDate(),
+							purchaseRecord.getEndDate(), pageable);
+					purchaseRecordCount[0] = this.purchaseRecordRepository.countByCarId(purchaseRecord.getCar().getId(), purchaseRecord.getBeginDate(),
+							purchaseRecord.getEndDate());
+					purchaseRecordCount[1] = this.purchaseRecordRepository.totalPriceByCarId(purchaseRecord.getCar().getId(), purchaseRecord.getBeginDate(),
+							purchaseRecord.getEndDate());
 				} else if ((purchaseRecord.getCar().getId() == -1) && (purchaseRecord.getProvider().getId() != -1) // -1,1,-1
 						&& (purchaseRecord.getEmployee().getId() == -1)) {
 					purchaseRecords = this.purchaseRecordRepository.findByProviderId(purchaseRecord.getProvider().getId(),
 							purchaseRecord.getBeginDate(), purchaseRecord.getEndDate(), pageable);
+					purchaseRecordCount[0] = this.purchaseRecordRepository.countByProviderId(purchaseRecord.getProvider().getId(),
+							purchaseRecord.getBeginDate(), purchaseRecord.getEndDate());
+					purchaseRecordCount[1] = this.purchaseRecordRepository.totalPriceByProviderId(purchaseRecord.getProvider().getId(),
+							purchaseRecord.getBeginDate(), purchaseRecord.getEndDate());
 				} else if ((purchaseRecord.getCar().getId() == -1) && (purchaseRecord.getProvider().getId() == -1) // -1,-1,1
 						&& (purchaseRecord.getEmployee().getId() != -1)) {
 					purchaseRecords = this.purchaseRecordRepository.findByEmployeeId(purchaseRecord.getEmployee().getId(),
 							purchaseRecord.getBeginDate(), purchaseRecord.getEndDate(), pageable);
+					purchaseRecordCount[0] = this.purchaseRecordRepository.countByEmployeeId(purchaseRecord.getEmployee().getId(),
+							purchaseRecord.getBeginDate(), purchaseRecord.getEndDate());
+					purchaseRecordCount[1] = this.purchaseRecordRepository.totalPriceByEmployeeId(purchaseRecord.getEmployee().getId(),
+							purchaseRecord.getBeginDate(), purchaseRecord.getEndDate());
 				}
 			} else {
 				PurchaseRecord e = this.purchaseRecordRepository.findById(id);
+				if(e != null) {
+					purchaseRecordCount[0] = 1;
+					purchaseRecordCount[1] = e.getPrice();
+				}
 				purchaseRecords = new ArrayList<PurchaseRecord>();
 				purchaseRecords.add(e);
 			}
